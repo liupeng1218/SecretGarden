@@ -28,7 +28,7 @@
 
 > 参考文档 [MDN](https://developer.mozilla.org) [兼容性](https://caniuse.com/)
 
-[线上demo](https://liupeng1218.github.io/SecretGardenDemo/css/center)
+[线上demo](https://liupeng1218.github.io/SecretGardenDemo/css/center.html)
 
 # 水平居中
 
