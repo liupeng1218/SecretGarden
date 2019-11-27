@@ -20,7 +20,6 @@
   - [table-cell](#table-cell-1)
   - [positon margin](#positon-margin-2)
   - [positon transform](#positon-transform-2)
-  - [](#)
   - [flex](#flex-2)
   - [小结](#%e5%b0%8f%e7%bb%93-2)
 
@@ -28,7 +27,7 @@
 
 > 参考文档 [MDN](https://developer.mozilla.org) [兼容性](https://caniuse.com/)
 
-[线上demo](https://liupeng1218.github.io/SecretGardenDemo/css/center.html)
+[线上 demo](https://liupeng1218.github.io/SecretGardenDemo/css/layout-center.html)
 
 # 水平居中
 
@@ -432,7 +431,7 @@
 - 元素会脱离文档流
 - `translate`有一定的兼容性问题
 
-## 
+##
 
 ## flex
 
@@ -454,7 +453,6 @@
 缺点
 
 - `flex`有一定的兼容性问题
-
 
 ## 小结
 
