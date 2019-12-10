@@ -1,3 +1,5 @@
+[@toc]
+
 <!-- TOC -->
 
 - [数据类型](#数据类型)
@@ -503,7 +505,6 @@ const rectangle = new Rectangle(10, 20)
 console.log(rectangle.area)
 // 输出 200
 
-
 // 继承
 class Square extends Rectangle {
   constructor(length) {
@@ -517,7 +518,6 @@ class Square extends Rectangle {
     return this.height * this.width
   }
 }
-
 
 const square = new Square(10)
 console.log(square.area)
@@ -557,15 +557,14 @@ function _inherits(subType, superType) {
 
 # this
 
-> 如何正确判断 this？箭头函数的 this 是什么？
-
 this 只与调用场景有关
 
-1. 直接调用：this 指向 window
-2. 对象调用：this 指向对象
-3. new 构造：指向构造出来的对象
-4. bind|call|apply：指向方法的第一个参数
-5. 箭头函数：没有 this，取决于包裹箭头函数的第一个普通函数的 this
+1. 全局上下文默认指向window，严格模式下指向undefined
+2. 直接调用：this 指向 window
+3. 对象调用：this 指向调用对象
+4. new 构造：指向构造出来的对象
+5. bind|call|apply：指向方法的第一个参数
+6. 箭头函数：没有 this，取决于包裹箭头函数的第一个普通函数的 this
 
 **不管我们给函数 bind 几次，fn 中的 this 永远由第一次 bind 决定**
 
