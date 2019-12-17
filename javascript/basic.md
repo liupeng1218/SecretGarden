@@ -1,5 +1,3 @@
-[@toc]
-
 <!-- TOC -->
 
 - [数据类型](#数据类型)
@@ -8,10 +6,10 @@
   - [检测](#检测)
     - [typeof](#typeof)
     - [instanceof](#instanceof)
-      - [实现 instanceof](#实现-instanceof)
     - [Object.prototype.toString.call()](#objectprototypetostringcall)
   - [类型转换](#类型转换)
     - [强制转换](#强制转换)
+      - [Boolean](#boolean)
     - [隐式转换](#隐式转换)
       - [四则运算](#四则运算)
       - [== 和 ===](#-和-)
@@ -19,7 +17,7 @@
   - [什么是闭包](#什么是闭包)
   - [闭包产生的原因](#闭包产生的原因)
   - [表现形式](#表现形式)
-  - [使用场景](#使用场景)
+  - [意义](#意义)
 - [原型](#原型)
   - [原型](#原型-1)
   - [原型链](#原型链)
@@ -56,7 +54,7 @@ JS 有七种内置类型，六种原始类型和一种对象类型`Object`
 ## 对象类型
 
 - 除了原始类型都是对象类型
-- 原始类型存储的是值，对象类型存储的是地址
+- 原始类型存储的是值，对象类型存储的是地址（指针）。当你创建了一个对象类型的时候，计算机会在内存中帮我们开辟一个空间来存放值，但是我们需要找到这个空间，这个空间会拥有一个地址（指针）。
 - 原始类型是值传递，直接复制在堆中的值。对象类型是引用传递，复制对象在堆中的内存地址值，指向在栈中的同一内容
 
 ## 检测
@@ -78,28 +76,15 @@ const p1 = new Person()
 p1 instanceof Person // true
 ```
 
-#### 实现 instanceof
+对于原始类型来说，你想直接通过 `instanceof` 来判断类型是不行的，当然我们还是有办法让 `instanceof` 判断原始类型的
 
 ```JS
-    function myInstanceof(ex, obj) {
-      // 基本类型直接返回false
-      if (typeof ex === 'null' || typeof ex !== 'object') {
-        return false
-      }
-      let exProto = Object.getPrototypeOf(ex)
-      while (true) {
-        // 原型链尽头
-        if (exProto === null) {
-          return false
-        }
-        // 找到相同原型
-        if (exProto === obj.prototype) {
-          return true
-        }
-        // 上溯原型
-        exProto = Object.getPrototypeOf(exProto)
-      }
-    }
+class PrimitiveString {
+  static [Symbol.hasInstance](x) {
+    return typeof x === 'string'
+  }
+}
+console.log('hello world' instanceof PrimitiveString) // true
 ```
 
 ### Object.prototype.toString.call()
@@ -112,9 +97,9 @@ p1 instanceof Person // true
 
 ### 强制转换
 
-- 转换为布尔值：`Boolean()`
-- 转换为数字：`Number()`、`ParseInt`和`ParseFloat`
-- 转换为字符串：调用`String()`时，如果有`toString()`方法则会调用该方法
+- 转换为布尔值：`Boolean`
+- 转换为数字：`Number`、`ParseInt`和`ParseFloat`
+- 转换为字符串：调用`String`时，如果有`toString`方法则会调用该方法
 
 | 原始值                                 | 转换目标 | 结果                                               |
 | -------------------------------------- | -------- | -------------------------------------------------- |
@@ -131,6 +116,10 @@ p1 instanceof Person // true
 | null                                   | 数字     | 0                                                  |
 | 除数组的引用类型、undefined            | 数字     | NaN                                                |
 | Symbol                                 | 数字     | 抛错                                               |
+
+#### Boolean
+
+在条件判断时，除了 `undefined` ， `null` ， `false` ， `NaN` ， `''` ， `0` ， `-0` ，其他所有值都转为 `true` ，包括所有对象。
 
 ### 隐式转换
 
@@ -151,13 +140,15 @@ p1 instanceof Person // true
 1. 两种类型相同，比值
 2. 是否在对比`null`和`undefined`，是则返回`true`
 3. `string`和`number`比较，会将`string`转为`number`
-4. `boolean`转换，会将`boolean`转为`number`
-5. 引用类型和值类型比较，会先将引用类型转换为值类型，与何种值类型比较，引用类型就转为该类型，布尔类型会转为数值类型，都转换为值类型之后，`Number(值类型)==Number(值类型)`进行比较
+4. 其中一方为`boolean`，会将`boolean`转为`number`
+5. 引用类型和值类型比较，会先将引用类型转换为值类型，都转换为值类型之后，`Number(值类型)==Number(值类型)`进行比较
+
+![](../images/typeConversion.png)
 
 `===`对比，直接对比类型和值
 
 **对象转值类型流程**
-对象转原始类型，会调用内置的`[ToPrimitive]`函数，该函数逻辑为
+对象转原始类型，会调用内置的`[[ToPrimitive]]`函数，该函数逻辑为
 
 1. 如果有`Symbol.toPrimitive`方法，优先调用返回
 2. 调用`valueOf`，如果转换为原始类型，则返回
@@ -216,7 +207,7 @@ foo();
 3. 回调函数
 4. IIFE（立即执行函数）
 
-## 使用场景
+## 意义
 
 **作用**
 
@@ -265,9 +256,14 @@ for (let i = 1; i <= 5; i++) {
 每定义一个函数类型数据时，都会自带一个`prototype`属性，这个属性指向该函数的原型对象
 函数通过`new`调用时，该函数为构造函数，生成一个实例对象，实例可以通过`_proto_`属性访问对应构造函数的原型对象
 
+原型的`constructor`属性指向其构造函数
+实例可以通过 `__proto__` 这个非标准属性找到其原型
+
 ## 原型链
 
 每个实例都有其对应的原型，原型本身也有其对应的原型，直到最后指向`null`，这个指向过程就是原型链
+
+![](../images/prototype.png)
 
 # 继承
 
@@ -559,14 +555,14 @@ function _inherits(subType, superType) {
 
 this 只与调用场景有关
 
-1. 全局上下文默认指向window，严格模式下指向undefined
+1. 全局上下文默认指向 window，严格模式下指向 undefined
 2. 直接调用：this 指向 window
 3. 对象调用：this 指向调用对象
 4. new 构造：指向构造出来的对象
 5. bind|call|apply：指向方法的第一个参数
 6. 箭头函数：没有 this，取决于包裹箭头函数的第一个普通函数的 this
 
-**不管我们给函数 bind 几次，fn 中的 this 永远由第一次 bind 决定**
+**无论给函数 bind 几次，fn 中的 this 永远由第一次 bind 决定**
 
 多种场景混合
 
