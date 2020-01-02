@@ -63,7 +63,7 @@ BFC 全称是 Block Formatting Context，即块格式化上下文。它是 CSS2.
 </div>
 ```
 
-![anonymous](../images/anonymousBox.png)
+![anonymous](../assets/images/anonymousBox.png)
 
 # 定位方案
 

@@ -6,6 +6,7 @@
   - [深拷贝](#深拷贝)
     - [JSON](#json)
     - [手动实现](#手动实现)
+- [正则表达式](#正则表达式)
 
 <!-- /TOC -->
 
@@ -210,3 +211,7 @@ const deepClone = (target, map = new WeakMap()) => {
 }
 
 ```
+
+# 正则表达式
+
+> [JS正则表达式](https://juejin.im/post/5965943ff265da6c30653879)

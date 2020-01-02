@@ -41,7 +41,7 @@
 1. 像素
 
 像素是一个小方块，有特定的位置和颜色。像素是屏幕的最小组成单位，屏幕是由无数个像素拼接而成。
-![pixel](../images/pixel.png)
+![pixel](../assets/images/pixel.png)
 
 2. 屏幕分辨率
 
@@ -145,7 +145,7 @@ DPI(Dot Per Inch)：即每英寸包括的点数。
 
 6. 浏览器大小
 
-![screensize](../images/screenSize.png)
+![screensize](../assets/images/screenSize.png)
 
 - window.innerHeight：获取浏览器视觉视口高度（包括垂直滚动条）。
 - window.outerHeight：获取浏览器窗口外部的高度。表示整个浏览器窗口的高度，包括侧边栏、窗口镶边和调正窗口大小的边框。

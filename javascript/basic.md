@@ -143,7 +143,7 @@ console.log('hello world' instanceof PrimitiveString) // true
 4. 其中一方为`boolean`，会将`boolean`转为`number`
 5. 引用类型和值类型比较，会先将引用类型转换为值类型，都转换为值类型之后，`Number(值类型)==Number(值类型)`进行比较
 
-![](../images/typeConversion.png)
+![](../assets/images/typeConversion.png)
 
 `===`对比，直接对比类型和值
 
@@ -263,7 +263,7 @@ for (let i = 1; i <= 5; i++) {
 
 每个实例都有其对应的原型，原型本身也有其对应的原型，直到最后指向`null`，这个指向过程就是原型链
 
-![](../images/prototype.png)
+![](../assets/images/prototype.png)
 
 # 继承
 
