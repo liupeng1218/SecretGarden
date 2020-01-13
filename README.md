@@ -19,6 +19,7 @@ Blog，记录及整理
 [性能](./javascript/performance.md)  
 [手工实现](./javascript/handwork.md)  
 [模块化](./javascript/module.md)
+[方法](./javascript/skill.md)
 [拾遗](./javascript/point.md)
 
 ## :house_with_garden: 工程化

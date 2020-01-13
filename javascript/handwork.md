@@ -6,6 +6,10 @@
   - [call](#call)
   - [apply](#apply)
   - [bind](#bind)
+- [JSON.stringify](#jsonstringify)
+- [JSON.parse](#jsonparse)
+  - [eval](#eval)
+  - [Function](#function)
 - [Promise](#promise)
 
 <!-- /TOC -->
@@ -129,6 +133,70 @@ Function.prototype.myBind = function (context) {
 
 ```
 
+# JSON.stringify
+
+- Boolean | Number| String 类型会自动转换成对应的原始值。
+- undefined、任意函数以及 symbol，会被忽略（出现在非数组对象的属性值中时），或者被转换成 null（出现在数组中时）。
+- 不可枚举的属性会被忽略
+- 如果一个对象的属性值通过某种间接的方式指回该对象本身，即循环引用，属性也会被忽略。
+
+```JS
+function jsonStringify(obj) {
+    let type = typeof obj;
+    if (type !== "object") {
+        if (/string|undefined|function/.test(type)) {
+            obj = '"' + obj + '"';
+        }
+        return String(obj);
+    } else {
+        let json = []
+        let arr = Array.isArray(obj)
+        for (let k in obj) {
+            let v = obj[k];
+            let type = typeof v;
+            if (/string|undefined|function/.test(type)) {
+                v = '"' + v + '"';
+            } else if (type === "object") {
+                v = jsonStringify(v);
+            }
+            json.push((arr ? "" : '"' + k + '":') + String(v));
+        }
+        return (arr ? "[" : "{") + String(json) + (arr ? "]" : "}")
+    }
+}
+jsonStringify({x : 5}) // "{"x":5}"
+jsonStringify([1, "false", false]) // "[1,"false",false]"
+jsonStringify({b: undefined}) // "{"b":"undefined"}"
+
+```
+
+# JSON.parse
+
+用来解析 JSON 字符串，构造由字符串描述的 JavaScript 值或对象。提供可选的 reviver 函数用以在返回之前对所得到的对象执行变换(操作)。
+
+## eval
+
+```js
+function jsonParse(opt) {
+    return eval('(' + opt + ')');
+}
+jsonParse(jsonStringify({x : 5}))
+// Object { x: 5}
+jsonParse(jsonStringify([1, "false", false]))
+// [1, "false", falsr]
+jsonParse(jsonStringify({b: undefined}))
+// Object { b: "undefined"}
+
+```
+
+## Function
+
+```JS
+var jsonStr = '{ "age": 20, "name": "jack" }'
+var json = (new Function('return ' + jsonStr))();
+
+```
+
 # Promise
 
 > [Promise](https://juejin.im/book/5bdc715fe51d454e755f75ef/section/5be1a7e451882516bc477978)
@@ -148,7 +216,7 @@ function MyPromise(fn) {
   that.rejectedCallbacks = []
 
 
-  
+
   // 首先我们创建了三个常量用于表示状态，对于经常使用的一些值都应该通过常量来管理，便于开发及后期维护
   // 在函数体内部首先创建了常量 that，因为代码可能会异步执行，用于获取正确的 this 对象
   // 一开始 Promise 的状态应该是 pending
@@ -170,8 +238,8 @@ function MyPromise(fn) {
       that.rejectedCallbacks.map(cb => cb(that.value))
     }
   }
-  
-  
+
+
   // 首先两个函数都得判断当前状态是否为等待中，因为规范规定只有等待态才可以改变状态
   // 将当前状态更改为对应状态，并且将传入的值赋值给 value
   // 遍历回调数组并执行

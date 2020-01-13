@@ -4,6 +4,7 @@
 - [Virtual DOM](#virtual-dom)
 - [响应式原理](#%e5%93%8d%e5%ba%94%e5%bc%8f%e5%8e%9f%e7%90%86)
   - [Object.defineProperty 的缺陷](#objectdefineproperty-%e7%9a%84%e7%bc%ba%e9%99%b7)
+  - [proxy](#proxy)
   - [编译过程](#%e7%bc%96%e8%af%91%e8%bf%87%e7%a8%8b)
 - [Route](#route)
   - [Hash 模式](#hash-%e6%a8%a1%e5%bc%8f)
@@ -16,12 +17,16 @@
   - [跨多层通信](#%e8%b7%a8%e5%a4%9a%e5%b1%82%e9%80%9a%e4%bf%a1)
   - [Event Bus](#event-bus)
   - [Vuex](#vuex)
-  - [computed 和 watch](#computed-%e5%92%8c-watch)
-  - [keep-alive](#keep-alive)
-  - [v-show 与 v-if](#v-show-%e4%b8%8e-v-if)
-  - [组件中 data 使用函数](#%e7%bb%84%e4%bb%b6%e4%b8%ad-data-%e4%bd%bf%e7%94%a8%e5%87%bd%e6%95%b0)
+- [computed 和 watch](#computed-%e5%92%8c-watch)
+  - [computed 的实现原理](#computed-%e7%9a%84%e5%ae%9e%e7%8e%b0%e5%8e%9f%e7%90%86)
+- [keep-alive](#keep-alive)
+- [v-show 与 v-if](#v-show-%e4%b8%8e-v-if)
+- [组件中 data 使用函数](#%e7%bb%84%e4%bb%b6%e4%b8%ad-data-%e4%bd%bf%e7%94%a8%e5%87%bd%e6%95%b0)
+- [nextTick](#nexttick)
 
 <!-- /TOC -->
+
+> [Vue 原理](https://juejin.im/post/5e04411f6fb9a0166049a073)
 
 # MVVM
 
@@ -41,6 +46,9 @@
 # 响应式原理
 
 Vue 内部使用了 `Object.defineProperty()` 来实现数据响应式，通过这个函数可以监听到 `set` 和 `get` 的事件。
+
+当创建 Vue 实例时,Vue 会遍历 data 选项的属性,利用 `Object.defineProperty` 为属性添加 `getter` 和 `setter` 对数据的读取进行劫持（`getter` 用来依赖收集,`setter` 用来派发更新）,并且在内部追踪依赖,在属性被访问和修改时通知变化。
+每个组件实例会有相应的 `watcher` 实例,会在组件渲染的过程中记录依赖的所有数据属性（进行依赖收集,还有 computed watcher,user watcher 实例）,之后依赖项被改动时,`setter` 方法会通知依赖与此 `data` 的 `watcher` 实例重新计算（派发更新）,从而使它关联的组件重新渲染。
 
 ```JS
 var data = { name: 'yck' }
@@ -127,6 +135,13 @@ class Watcher {
 ## Object.defineProperty 的缺陷
 
 如果通过下标方式修改数组数据或者给对象新增属性并不会触发组件的重新渲染，因为 `Object.defineProperty`不能拦截到这些操作，更精确的来说，对于数组而言，大部分操作都是拦截不到的，只是 Vue 内部通过重写函数的方式解决了这个问题。
+
+## proxy
+
+`Object.defineProperty` 是通过 递归 + 遍历 `data` 对象来实现对数据的监控的,如果属性值也是对象那么需要深度遍历
+`Object.defineProperty` 拦截不到数组的一些操作
+
+`Proxy` 可以劫持整个对象,并返回一个新的对象。`Proxy` 不仅可以代理对象,还可以代理数组。还可以代理动态增加的属性。
 
 ## 编译过程
 
@@ -303,7 +318,7 @@ created() {
 
 `Vuex` 可以完美处理数据管理等需求，在中大型项目中可以引入
 
-## computed 和 watch
+# computed 和 watch
 
 computed 是计算属性，依赖其他属性计算值，并且 computed 的值有缓存，只有当计算值变化才会返回内容。
 
@@ -311,16 +326,39 @@ watch 监听到值的变化就会执行回调，在回调中可以进行一些�
 
 所以一般来说需要依赖别的属性来动态获得值的时候可以使用 computed，对于监听到值的变化需要做一些复杂业务逻辑的情况可以使用 watch。
 
-## keep-alive
+## computed 的实现原理
+
+`computed` 本质是一个惰性求值的观察者。
+`computed` 内部实现了一个惰性的 `watcher`,也就是 `computed watcher`,`computed watcher` 不会立刻求值,同时持有一个 `dep` 实例。
+其内部通过 `this.dirty` 属性标记计算属性是否需要重新求值。
+当 `computed` 的依赖状态发生改变时,就会通知这个惰性的 `watcher`,
+`computed watcher` 通过 `this.dep.subs.length` 判断有没有订阅者,
+有的话,会重新计算,然后对比新旧值,如果变化了,会重新渲染。 (Vue 想确保不仅仅是计算属性依赖的值发生变化，而是当计算属性最终计算的值发生变化时才会触发渲染 `watcher` 重新渲染，本质上是一种优化。)
+没有的话,仅仅把 `this.dirty = true`。 (当计算属性依赖于其他数据时，属性并不会立即重新计算，只有之后其他地方需要读取属性的时候，它才会真正计算，即具备 lazy（懒计算）特性。)
+
+# keep-alive
 
 如果你需要在组件切换的时候，保存一些组件的状态防止多次渲染，就可以使用 keep-alive 组件包裹需要保存的组件。
 
-## v-show 与 v-if
+# v-show 与 v-if
 
 v-show 只是在 `display: none` 和 `display: block` 之间切换。无论初始条件是什么都会被渲染出来，后面只需要切换 CSS，DOM 还是一直保留着的。所以总的来说 v-show 在初始渲染时有更高的开销，但是切换开销很小，更适合于频繁切换的场景。
 
 v-if 当属性初始为 false 时，组件就不会被渲染，直到条件为 true，并且切换条件时会触发销毁 / 挂载组件，所以总的来说在切换时开销更高，更适合不经常切换的场景。
 
-## 组件中 data 使用函数
+# 组件中 data 使用函数
 
 组件复用时所有组件实例都会共享 data，如果 data 是对象的话，就会造成一个组件修改 data 以后会**影响到其他所有组件**，所以需要将 data 写成函数，每次用到就调用一次函数获得新的数据。
+
+# nextTick
+
+`Vue` 在更新 DOM 时是异步执行的。只要侦听到数据变化，`Vue` 将开启一个队列，并缓冲在同一事件循环中发生的所有数据变更。
+如果同一个 `watcher` 被多次触发，只会被推入到队列中一次。这种在缓冲时去除重复数据对于避免不必要的计算和 DOM 操作是非常重要的。
+`nextTick`  会在 DOM 更新完毕后出发
+
+
+vue 的 `nextTick` 方法的实现原理:
+
+- vue 用异步队列的方式来控制 DOM 更新和 `nextTick` 回调先后执行
+- microtask 因为其高优先级特性，能确保队列中的微任务在一次事件循环前被执行完毕
+- 考虑兼容问题,vue 做了 microtask 向 macrotask 的降级方案

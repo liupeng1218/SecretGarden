@@ -1,64 +1,11 @@
 <!-- TOC -->
 
-- [类数组](#类数组)
-- [forEach 的 return](#foreach-的-return)
-- [JS 判断是否包含值](#js-判断是否包含值)
-- [数组扁平化](#数组扁平化)
-- [深浅拷贝](#深浅拷贝)
-- [数组去重](#数组去重)
+- [forEach 的 return](#foreach-%e7%9a%84-return)
+- [JS 判断是否包含值](#js-%e5%88%a4%e6%96%ad%e6%98%af%e5%90%a6%e5%8c%85%e5%90%ab%e5%80%bc)
 
 <!-- /TOC -->
 
-# 类数组
 
-函数中的`arguments`，使用`getElementsByTagName`获取的`HTMLCollection`，一级使用`querySeleor`获取的`nodeList`都是类数组对象
-它们都从 0 开始开裂，有`length`属性，但是不是数组，数组的很多方法也不能调用
-
-**转化**
-
-1. Array.prototype.slice.call
-
-```JS
-function sum(a, b) {
-  let args = Array.prototype.slice.call(arguments);
-  console.log(args.reduce((sum, cur) => sum + cur));//args可以调用数组原生的方法啦
-}
-sum(1, 2);//3
-
-```
-
-2. Array.from
-
-```JS
-function sum(a, b) {
-  let args = Array.from(arguments);
-  console.log(args.reduce((sum, cur) => sum + cur));//args可以调用数组原生的方法啦
-}
-sum(1, 2);//3
-
-```
-
-3. ES6 展开运算符`...`
-
-```JS
-function sum(a, b) {
-  let args = [...arguments];
-  console.log(args.reduce((sum, cur) => sum + cur));//args可以调用数组原生的方法啦
-}
-sum(1, 2);//3
-
-```
-
-4. Array.prototype.concat.apply
-
-```JS
-function sum(a, b) {
-  let args = Array.prototype.concat.apply([], arguments);//apply方法会把第二个参数展开
-  console.log(args.reduce((sum, cur) => sum + cur));//args可以调用数组原生的方法啦
-}
-sum(1, 2);//3
-
-```
 
 # forEach 的 return
 
@@ -112,66 +59,3 @@ var result = arr.findIndex(item =>{
 console.log(result);
 
 ```
-
-# 数组扁平化
-
-数组扁平化即将多维数组转化为一维数组
-
-1. ES6 中的`flat`方法
-2. replace + split
-
-```JS
-ary = str.replace(/(\[|\])/g, '').split(',')
-```
-
-3. replace + JSON.parse
-
-```js
-str = str.replace(/(\[|\])/g, '')
-str = '[' + str + ']'
-ary = JSON.parse(str)
-```
-
-4. 递归
-
-```JS
-let result = [];
-let fn = function(ary) {
-  for(let i = 0; i < ary.length; i++) {
-    let item = ary[i];
-    if (Array.isArray(ary[i])){
-      fn(item);
-    } else {
-      result.push(item);
-    }
-  }
-}
-
-```
-
-5. reduce
-
-```JS
-function flatten(ary) {
-    return ary.reduce((pre, cur) => {
-        return pre.concat(Array.isArray(cur) ? flatten(cur) : cur);
-    }, []);
-}
-let ary = [1, 2, [3, 4], [5, [6, 7]]]
-console.log(flatten(ary))
-
-```
-
-6. 扩展运算符
-
-```JS
-//只要有一个元素有数组，那么循环继续
-while (ary.some(Array.isArray)) {
-  ary = [].concat(...ary);
-}
-
-```
-
-# 深浅拷贝
-
-# 数组去重
