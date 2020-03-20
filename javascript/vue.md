@@ -1,11 +1,11 @@
 <!-- TOC -->
 
 - [MVVM](#mvvm)
-- [Virtual DOM](#virtual-dom)
 - [响应式原理](#%e5%93%8d%e5%ba%94%e5%bc%8f%e5%8e%9f%e7%90%86)
   - [Object.defineProperty 的缺陷](#objectdefineproperty-%e7%9a%84%e7%bc%ba%e9%99%b7)
   - [proxy](#proxy)
   - [编译过程](#%e7%bc%96%e8%af%91%e8%bf%87%e7%a8%8b)
+- [Virtual DOM](#virtual-dom)
 - [Route](#route)
   - [Hash 模式](#hash-%e6%a8%a1%e5%bc%8f)
   - [History 模式](#history-%e6%a8%a1%e5%bc%8f)
@@ -26,7 +26,6 @@
 
 <!-- /TOC -->
 
-> [Vue 原理](https://juejin.im/post/5e04411f6fb9a0166049a073)
 
 # MVVM
 
@@ -41,14 +40,18 @@
 
 以 Vue 框架来举例，ViewModel 就是组件的实例。View 就是模板，Model 的话在引入 Vuex 的情况下是完全可以和组件分离的。
 
-# Virtual DOM
-
 # 响应式原理
 
-Vue 内部使用了 `Object.defineProperty()` 来实现数据响应式，通过这个函数可以监听到 `set` 和 `get` 的事件。
+> [响应式原理](https://juejin.im/post/5abdd6f6f265da23793c4458)
 
-当创建 Vue 实例时,Vue 会遍历 data 选项的属性,利用 `Object.defineProperty` 为属性添加 `getter` 和 `setter` 对数据的读取进行劫持（`getter` 用来依赖收集,`setter` 用来派发更新）,并且在内部追踪依赖,在属性被访问和修改时通知变化。
-每个组件实例会有相应的 `watcher` 实例,会在组件渲染的过程中记录依赖的所有数据属性（进行依赖收集,还有 computed watcher,user watcher 实例）,之后依赖项被改动时,`setter` 方法会通知依赖与此 `data` 的 `watcher` 实例重新计算（派发更新）,从而使它关联的组件重新渲染。
+Vue 是采用**数据劫持**结合**发布订阅模式**，通过`Object.defineProperty()`来劫持各个属性的 `getter`,`setter`, 在数据变动时发布消息给订阅者，触发相应的回调函数，从而实现数据双向绑定
+
+Vue 主要通过以下 4 个步骤来实现数据双向绑定的：
+
+1. 实现一个监听器 `Observer` ：对数据对象进行遍历，包括子属性对象的属性，利用 `Object.defineProperty()` 对属性都加上 `setter` 和 `getter`。这样的话，给这个对象的某个值赋值，就会触发 `setter`，那么就能监听到了数据变化。
+2. 实现一个解析器 `Compile` ：解析 Vue 模板指令，将模板中的变量都替换成数据，然后初始化渲染页面视图，并将每个指令对应的节点绑定更新函数，添加监听数据的订阅者，一旦数据有变动，收到通知，调用更新函数进行数据更新。
+3. 实现一个订阅者 `Watcher` ：`Watcher` 订阅者是 `Observer` 和 `Compile` 之间通信的桥梁 ，主要的任务是订阅 `Observer` 中的属性值变化的消息，当收到属性值变化的消息时，触发解析器 `Compile` 中对应的更新函数。
+4. 实现一个订阅器 `Dep` ：订阅器采用 发布-订阅 设计模式，用来收集订阅者 `Watcher`，对监听器 `Observer` 和 订阅者 `Watcher` 进行统一管理。
 
 ```JS
 var data = { name: 'yck' }
@@ -138,10 +141,11 @@ class Watcher {
 
 ## proxy
 
-`Object.defineProperty` 是通过 递归 + 遍历 `data` 对象来实现对数据的监控的,如果属性值也是对象那么需要深度遍历
-`Object.defineProperty` 拦截不到数组的一些操作
-
-`Proxy` 可以劫持整个对象,并返回一个新的对象。`Proxy` 不仅可以代理对象,还可以代理数组。还可以代理动态增加的属性。
+- Proxy 可以直接监听对象而非属性；
+- Proxy 可以直接监听数组的变化；
+- Proxy 有多达 13 种拦截方法,不限于 `apply` 、 `ownKeys` 、 `deleteProperty` 、`has` 等等是 `Object.defineProperty` 不具备的；
+- Proxy 返回的是一个新对象,我们可以只操作新的对象达到目的,而 `Object.defineProperty` 只能遍历对象属性直接修改；
+- Proxy 作为新标准将受到浏览器厂商重点持续的性能优化，也就是传说中的新标准的性能红利；
 
 ## 编译过程
 
@@ -178,6 +182,16 @@ Vue 会通过编译器将模板通过几个阶段最终编译为 `render` 函数
 接下来就是优化 AST 的阶段。在当前版本下，Vue 进行的优化内容其实还是不多的。只是对节点进行了静态内容提取，也就是将永远不会变动的节点提取了出来，实现复用 Virtual DOM，跳过对比算法的功能。在下一个大版本中，Vue 会在优化 AST 的阶段继续发力，实现更多的优化功能，尽可能的在编译阶段压榨更多的性能，比如说提取静态的属性等等优化行为。
 
 最后一个阶段就是通过 AST 生成 render 函数了。其实这一阶段虽然分支有很多，但是最主要的目的就是遍历整个 AST，根据不同的条件生成不同的代码罢了。
+
+# Virtual DOM
+
+> [虚拟DOM](https://juejin.im/post/5d36cc575188257aea108a74#heading-14)
+
+虚拟 DOM 的实现原理主要包括以下 3 部分：
+
+- 用 JavaScript 对象模拟真实 DOM 树，对真实 DOM 进行抽象；
+- diff 算法 — 比较两棵虚拟 DOM 树的差异；
+- pach 算法 — 将两个虚拟 DOM 对象的差异应用到真正的 DOM 树。
 
 # Route
 
@@ -354,8 +368,7 @@ v-if 当属性初始为 false 时，组件就不会被渲染，直到条件为 t
 
 `Vue` 在更新 DOM 时是异步执行的。只要侦听到数据变化，`Vue` 将开启一个队列，并缓冲在同一事件循环中发生的所有数据变更。
 如果同一个 `watcher` 被多次触发，只会被推入到队列中一次。这种在缓冲时去除重复数据对于避免不必要的计算和 DOM 操作是非常重要的。
-`nextTick`  会在 DOM 更新完毕后出发
-
+`nextTick` 会在 DOM 更新完毕后出发
 
 vue 的 `nextTick` 方法的实现原理:
 

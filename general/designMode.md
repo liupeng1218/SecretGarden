@@ -1,6 +1,7 @@
 <!-- TOC -->
 
 - [工厂模式](#工厂模式)
+  - [抽象工厂](#抽象工厂)
 - [单例模式](#单例模式)
 - [适配器模式](#适配器模式)
 - [装饰模式](#装饰模式)
@@ -10,24 +11,26 @@
 
 <!-- /TOC -->
 
+> [设计模式](https://juejin.im/book/5c70fc83518825428d7f9dfb/section/5c70fc845188256282697b96)
+
 # 工厂模式
 
-工厂模式分为好几种，这里就不一一讲解了，以下是一个简单工厂模式的例子
+简单的工厂模式就是将创建对象的过程单独封装
 
 ```JS
 class Man {
-constructor(name) {
-this.name = name
-}
-alertName() {
-alert(this.name)
-}
+  constructor(name) {
+    this.name = name
+  }
+  alertName() {
+    alert(this.name)
+  }
 }
 
 class Factory {
-static create(name) {
-return new Man(name)
-}
+  static create(name) {
+    return new Man(name)
+  }
 }
 
 Factory.create('yck').alertName()
@@ -38,6 +41,10 @@ Factory.create('yck').alertName()
 可以想象一个场景。假设有一份很复杂的代码需要用户去调用，但是用户并不关心这些复杂的代码，只需要你提供给我一个接口去调用，用户只负责传递需要的参数，至于这些参数怎么使用，内部有什么逻辑是不关心的，只需要你最后返回我一个实例。这个构造过程就是工厂。
 
 工厂起到的作用就是隐藏了创建实例的复杂度，只需要提供一个接口，简单清晰。
+
+## 抽象工厂
+
+抽象工厂模式的定义，是围绕一个超级工厂创建其他工厂
 
 # 单例模式
 
