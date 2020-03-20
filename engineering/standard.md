@@ -1,3 +1,10 @@
+# HTML规范
+
+1. 结构内容使用`BEM`命名规范
+2. 动态数据内容使用`D(data)`前缀配合数据说明命名，如`Duser-name`
+3. 事件触发元素使用`H(handle)`前缀配合动作说明命名，如`Hquery-table`
+4. 表单数据元素使用`F(form)`前缀配合表单参数类型，如`Fbuy-quantity`
+
 # css规范
 
 使用`BEM`规范，主要规则为
