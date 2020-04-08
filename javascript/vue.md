@@ -40,6 +40,8 @@
 
 以 Vue 框架来举例，ViewModel 就是组件的实例。View 就是模板，Model 的话在引入 Vuex 的情况下是完全可以和组件分离的。
 
+
+
 # 响应式原理
 
 > [响应式原理](https://juejin.im/post/5abdd6f6f265da23793c4458)
