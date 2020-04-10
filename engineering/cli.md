@@ -70,9 +70,13 @@
 
 ## 处理命令行
 
-通过 `commander` 设置不同的命令
+通过 `commander` 设置不同的命令动作，[commander](https://github.com/tj/commander.js/blob/HEAD/Readme_zh-CN.md)
 
-`commander` 方法设置命令名字，`description` 设置命令描述，`alias` 设置命令简称，`option` 设置命令需要的参数
+- `command`： 方法设置命令名字
+- `description`： 设置命令描述
+- `alias`： 设置命令简称
+- `option`： 设置命令需要的参数
+- `action`： 设置命令钩子
 
 首先设置项目创建，项目初始化，项目启动三个命令
 
@@ -96,4 +100,4 @@
 
 ## 项目启动
 
-项目本地运行需要借助`webpack`来实现
+项目本地运行需要借助`webpack`来实现，获取`prot`后合并到模板的`webpack.config.dev.js`中作为启动配置
