@@ -113,7 +113,7 @@
 ### 最佳实践
 
 1. [工具方法集](https://github.com/liupeng1218/PPlus) :heavy_exclamation_mark:
-2. [webpack-vue](https://github.com/liupeng1218/vue-template) :heavy_exclamation_mark:
-3. [gulp](https://github.com/liupeng1218/gulp-template) :heavy_exclamation_mark:
+2. [vue-webpack](https://github.com/liupeng1218/vue-template) :heavy_exclamation_mark:
+3. [gulp-webpack](https://github.com/liupeng1218/gulp-template) :heavy_exclamation_mark:
 4. [脚手架](https://github.com/liupeng1218/msimple-cli) :heavy_exclamation_mark:
-5. [组件库](https://github.com/liupeng1218/mvui) :heavy_exclamation_mark:
+5. [vue组件库](https://github.com/liupeng1218/mvui) :heavy_exclamation_mark:
