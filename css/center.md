@@ -1,37 +1,39 @@
+**CSS 居中**
+总结了网页中常见的水平，垂直和水平垂直的居中方式，每种居中模式都整理的常用的方法和场景。[线上 demo](https://liupeng1218.github.io/SecretGardenDemo/css/layout-center.html)
+
+> 参考文档 [MDN](https://developer.mozilla.org)
+> 参考文档 [兼容性](https://caniuse.com/)
+
 <!-- TOC -->
 
-- [水平居中](#%e6%b0%b4%e5%b9%b3%e5%b1%85%e4%b8%ad)
-  - [text-algin](#text-algin)
-  - [margin](#margin)
-  - [positon margin](#positon-margin)
-  - [positon transform](#positon-transform)
-  - [flex](#flex)
-  - [小结](#%e5%b0%8f%e7%bb%93)
-- [垂直居中](#%e5%9e%82%e7%9b%b4%e5%b1%85%e4%b8%ad)
-  - [line-height](#line-height)
-  - [vertical-align](#vertical-align)
-  - [table-cell](#table-cell)
-  - [positon margin](#positon-margin-1)
-  - [positon transform](#positon-transform-1)
-  - [flex](#flex-1)
-  - [小结](#%e5%b0%8f%e7%bb%93-1)
-- [水平垂直居中](#%e6%b0%b4%e5%b9%b3%e5%9e%82%e7%9b%b4%e5%b1%85%e4%b8%ad)
-  - [text-algin&line-height](#text-alginline-height)
-  - [table-cell](#table-cell-1)
-  - [positon margin](#positon-margin-2)
-  - [positon transform](#positon-transform-2)
-  - [flex](#flex-2)
-  - [小结](#%e5%b0%8f%e7%bb%93-2)
+- [1. 水平居中](#1-%e6%b0%b4%e5%b9%b3%e5%b1%85%e4%b8%ad)
+  - [1.1. text-algin](#11-text-algin)
+  - [1.2. margin](#12-margin)
+  - [1.3. positon margin](#13-positon-margin)
+  - [1.4. positon transform](#14-positon-transform)
+  - [1.5. flex](#15-flex)
+  - [1.6. 小结](#16-%e5%b0%8f%e7%bb%93)
+- [2. 垂直居中](#2-%e5%9e%82%e7%9b%b4%e5%b1%85%e4%b8%ad)
+  - [2.1. line-height](#21-line-height)
+  - [2.2. vertical-align](#22-vertical-align)
+  - [2.3. table-cell](#23-table-cell)
+  - [2.4. positon margin](#24-positon-margin)
+  - [2.5. positon transform](#25-positon-transform)
+  - [2.6. flex](#26-flex)
+  - [2.7. 小结](#27-%e5%b0%8f%e7%bb%93)
+- [3. 水平垂直居中](#3-%e6%b0%b4%e5%b9%b3%e5%9e%82%e7%9b%b4%e5%b1%85%e4%b8%ad)
+  - [3.1. text-algin&line-height](#31-text-alginline-height)
+  - [3.2. table-cell](#32-table-cell)
+  - [3.3. positon margin](#33-positon-margin)
+  - [3.4. positon transform](#34-positon-transform)
+  - [3.5. flex](#35-flex)
+  - [3.6. 小结](#36-%e5%b0%8f%e7%bb%93)
 
 <!-- /TOC -->
 
-> 参考文档 [MDN](https://developer.mozilla.org) [兼容性](https://caniuse.com/)
+# 1. 水平居中
 
-[线上 demo](https://liupeng1218.github.io/SecretGardenDemo/css/layout-center.html)
-
-# 水平居中
-
-## text-algin
+## 1.1. text-algin
 
 [text-algin](https://developer.mozilla.org/zh-CN/docs/Web/CSS/text-align) 定义行内内容如何相对它的块父元素对齐
 
@@ -51,7 +53,7 @@
 - 只对行内内容有效
 - 子元素宽度大于父元素宽度则失效
 
-## margin
+## 1.2. margin
 
 [margin](https://developer.mozilla.org/zh-CN/docs/Web/CSS/margin) 设置为`auto`时，浏览器会选择一个合适的`margin`，即会均分剩余空间。上下的`margin`设置`auto`，其计算值为 0
 
@@ -72,7 +74,7 @@
 - 元素必须固定宽度
 - 元素宽度要小于父元素
 
-## positon margin
+## 1.3. positon margin
 
 利用`positon`子绝父相和`margin`组合达到水平居中的目的
 
@@ -98,7 +100,7 @@
 - 元素必须固定宽度
 - 元素会脱离文档流
 
-## positon transform
+## 1.4. positon transform
 
 利用`positon`子绝父相和`transform`组合达到水平居中的目的
 
@@ -124,7 +126,7 @@
 - 元素会脱离文档流
 - `translate`有一定的兼容性问题
 
-## flex
+## 1.5. flex
 
 `flex`容器的子元素会成为伸缩项目，设置其主轴的排列方式，可以使其子元素达到居中效果
 
@@ -144,15 +146,15 @@
 
 - `flex`有一定的兼容性问题
 
-## 小结
+## 1.6. 小结
 
 1. 简单场景优先考虑`text-algin`和`margin`，结构简单，兼容性好
 2. `position`和`margin`/`transform`可以对外层布局及子元素不定宽情况进行处理
 3. `flex`简单灵活，且不仅适用于居中，功能非常强大。在移动端或对兼容不强要求情况下推荐使用
 
-# 垂直居中
+# 2. 垂直居中
 
-## line-height
+## 2.1. line-height
 
 利用`line-height`和`height`组合实现居中效果
 
@@ -173,7 +175,7 @@
 - 只适用于单行行内元素
 - 需要定高
 
-## vertical-align
+## 2.2. vertical-align
 
 利用[`vertical-align`和`line-height`](http://www.zhangxinxu.com/wordpress/2015/08/css-deep-understand-vertical-align-and-line-height/)的关系实现图片的居中
 
@@ -198,7 +200,7 @@
 - 需要`font-size`配合才能实现绝的的垂直居中
 - 只适用于单行行内元素
 
-## table-cell
+## 2.3. table-cell
 
 指定元素作为表格单元格来处理，和`<td>`标签有相同的特性
 
@@ -218,7 +220,7 @@
 
 - 设置`tabl-cell`的元素，会有宽度和高度的值设置百分比无效，不感知 margin 等隐形特性
 
-## positon margin
+## 2.4. positon margin
 
 同水平居中，利用`positon`子绝父相和`margin`组合达到水平居中的目的
 
@@ -254,7 +256,7 @@
 - 元素必须固定尺寸
 - 元素会脱离文档流
 
-## positon transform
+## 2.5. positon transform
 
 同水平居中，利用`positon`子绝父相和`transform`组合达到水平居中的目的
 
@@ -281,7 +283,7 @@
 - 元素会脱离文档流
 - `translate`有一定的兼容性问题
 
-## flex
+## 2.6. flex
 
 `flex`功能非常灵活，设置其排列方式，对齐方式可以实现垂直居中
 
@@ -301,15 +303,15 @@
 
 - `flex`有一定的兼容性问题
 
-## 小结
+## 2.7. 小结
 
 1. 单行行内内容优先考虑`line-height`结构简单，兼容性好
 2. `position`和`margin`/`transform`可以对外层布局及子元素不定高情况进行处理
 3. `flex`简单灵活，且不仅适用于居中，功能非常强大。在移动端或对兼容不强要求情况下推荐使用
 
-# 水平垂直居中
+# 3. 水平垂直居中
 
-## text-algin&line-height
+## 3.1. text-algin&line-height
 
 `text-algin`配合`line-height`实现单行行内元素的水平垂直居中，`font-size:0`消除图片近似居中的 bug
 
@@ -337,7 +339,7 @@
 
 - 只会单行行内元素有效
 
-## table-cell
+## 3.2. table-cell
 
 利用`table-cell`单元格特性实现居中
 
@@ -366,7 +368,7 @@
 
 - 设置`tabl-cell`的元素，会有宽度和高度的值设置百分比无效，不感知 margin 等隐形特性
 
-## positon margin
+## 3.3. positon margin
 
 利用`positon`子绝父相和`margin`组合达到水平垂直居中的目的
 
@@ -404,7 +406,7 @@
 - 元素必须固定宽度
 - 元素会脱离文档流
 
-## positon transform
+## 3.4. positon transform
 
 利用`positon`子绝父相和`transform`组合达到水平垂直居中的目的
 
@@ -431,9 +433,7 @@
 - 元素会脱离文档流
 - `translate`有一定的兼容性问题
 
-##
-
-## flex
+## 3.5. flex
 
 `flex`容器的子元素会成为伸缩项目，设置其主轴和侧轴的排列方式可以使其子元素达到水平垂直居中效果
 
@@ -454,7 +454,7 @@
 
 - `flex`有一定的兼容性问题
 
-## 小结
+## 3.6. 小结
 
 1. 简单行内场景优先考虑`text-algin`和`line-height`的结合，结构简单，兼容性好
 2. `position`和`margin`/`transform`是对其水平居中和垂直居中的组合，可以应用于绝大部分场景
