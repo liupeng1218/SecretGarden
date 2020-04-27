@@ -1,7 +1,7 @@
 **网页常见布局**
 总结了网页中常见的两列，多列等多种布局方式，每种布局模式都整理的常用的方法和场景。
 
-> 参考 Sweet-KK老师的 [布局分析](https://github.com/Sweet-KK/css-layout) 文章
+> 参考 Sweet-KK 老师的 [布局分析](https://github.com/Sweet-KK/css-layout) 文章
 
 <!-- TOC -->
 
@@ -40,18 +40,17 @@
     - [3.1.2. table](#312-table)
     - [3.1.3. flex](#313-flex)
     - [3.1.4. grid](#314-grid)
-  - [3.2. 九宫格布局](#32-%e4%b9%9d%e5%ae%ab%e6%a0%bc%e5%b8%83%e5%b1%80)
-    - [3.2.1. table](#321-table)
-    - [3.2.2. flex](#322-flex)
-    - [3.2.3. grid](#323-grid)
-- [4. 栅格系统](#4-%e6%a0%85%e6%a0%bc%e7%b3%bb%e7%bb%9f)
+- [4. 九宫格布局](#4-%e4%b9%9d%e5%ae%ab%e6%a0%bc%e5%b8%83%e5%b1%80)
+  - [4.1. table](#41-table)
+  - [4.2. flex](#42-flex)
+  - [4.3. grid](#43-grid)
+- [5. 栅格系统](#5-%e6%a0%85%e6%a0%bc%e7%b3%bb%e7%bb%9f)
 
 <!-- /TOC -->
 
 # 1. 两列布局
 
-[两列布局线上 demo](https://liupeng1218.github.io/SecretGardenDemo/css/layout-two_columns.html)
-两列布局是常见的基础布局之一，常见为一侧定宽，另一侧自适应。还有一种为一列不定宽，一列自适应。
+两列布局是常见的基础布局之一，常见为一侧定宽，另一侧自适应。还有一种为一列不定宽，一列自适应。[线上 demo](https://liupeng1218.github.io/SecretGardenDemo/css/layout-two_columns.html)
 
 公共样式
 
@@ -78,8 +77,8 @@
 
 ```HTML
     <div class="item method-one">
-      <div class="left"></div>
-      <div class="right"></div>
+      <div class="left">float-left</div>
+      <div class="right">float-right</div>
     </div>
 ```
 
@@ -98,8 +97,8 @@
 
 ```HTML
     <div class="item method-seven">
-      <div class="left">left</div>
-      <div class="right">right</div>
+      <div class="left">float-left</div>
+      <div class="right">float-right</div>
     </div>
 ```
 
@@ -134,8 +133,8 @@
 
 ```HTML
     <div class="item method-two">
-      <div class="left"></div>
-      <div class="right"></div>
+      <div class="left">overflow-left</div>
+      <div class="right">overflow-right</div>
     </div>
 ```
 
@@ -161,8 +160,8 @@
 
 ```HTML
     <div class="item method-three">
-      <div class="left">table</div>
-      <div class="right">table</div>
+      <div class="left">table-left</div>
+      <div class="right">table-right</div>
     </div>
 ```
 
@@ -195,8 +194,8 @@
 
 ```HTML
     <div class="item method-four">
-      <div class="left">position</div>
-      <div class="right">position</div>
+      <div class="left">position-left</div>
+      <div class="right">position-right</div>
     </div>
 ```
 
@@ -234,8 +233,8 @@
 
 ```HTML
     <div class="item method-five">
-      <div class="left">flex</div>
-      <div class="right">flex</div>
+      <div class="left">flex-left</div>
+      <div class="right">flex-right</div>
     </div>
 ```
 
@@ -267,8 +266,8 @@
 
 ```HTML
     <div class="item method-six">
-      <div class="left">grid</div>
-      <div class="right">grid</div>
+      <div class="left">grid-left</div>
+      <div class="right">grid-right</div>
     </div>
 ```
 
@@ -296,8 +295,8 @@
 
 ```HTML
     <div class="item method-eight">
-      <div class="left"></div>
-      <div class="right"></div>
+      <div class="left">float-left</div>
+      <div class="right">float-right</div>
     </div>
 ```
 
@@ -322,8 +321,8 @@
 
 ```HTML
     <div class="item method-nine">
-      <div class="left"></div>
-      <div class="right"></div>
+      <div class="left">flex-left</div>
+      <div class="right">flex-right</div>
     </div>
 ```
 
@@ -350,8 +349,8 @@
 
 ```HTML
     <div class="item method-ten">
-      <div class="left"></div>
-      <div class="right"></div>
+      <div class="left">grid-left</div>
+      <div class="right">grid-right</div>
     </div>
 ```
 
@@ -621,7 +620,7 @@
 
 缺点
 
-- 有一定兼容性问题 ####两列顶宽，中间自适应
+- 有一定兼容性问题
 
 ## 2.2. 两侧定宽,中间自适应
 
@@ -809,9 +808,9 @@
 
 ```HTML
     <div class="item method-eleven">
-      <div class="left">eleven-left</div>
-      <div class="middle">eleven-middle</div>
-      <div class="right">eleven-right</div>
+      <div class="left">flex-left</div>
+      <div class="middle">flex-middle</div>
+      <div class="right">flex-right</div>
     </div>
 ```
 
@@ -845,9 +844,9 @@
 
 ```HTML
     <div class="item method-twelve">
-      <div class="left">twelve-left</div>
-      <div class="middle">twelve-middle</div>
-      <div class="right">twelve-right</div>
+      <div class="left">grid-left</div>
+      <div class="middle">grid-middle</div>
+      <div class="right">grid-right</div>
     </div>
 ```
 
@@ -1036,11 +1035,11 @@
 2. `table`布局可以任意划分列，使用时需要注意其隐性特性对布局的影响
 3. `flex`使用方便，功能强大，兼容性允许的情况下推荐使用
 
-## 3.2. 九宫格布局
+# 4. 九宫格布局
 
 [九宫格布局线上 demo](https://liupeng1218.github.io/SecretGardenDemo/css/layout-sudoku.html)
 
-### 3.2.1. table
+## 4.1. table
 
 使用`table`布局均分均分行和列
 
@@ -1088,7 +1087,7 @@
 
 - 需要考虑`table`的隐性特性
 
-### 3.2.2. flex
+## 4.2. flex
 
 使用`flex`布局，对伸缩元素进行换行均分
 
@@ -1128,7 +1127,7 @@
 
 - 有一定兼容性问题
 
-### 3.2.3. grid
+## 4.3. grid
 
 使用`grid`布局，设置行和列的分隔数量和比例
 
@@ -1167,7 +1166,7 @@
 1. 简单场景可以使用`table`实现，结构简单，兼容性好，需要注意其隐性特性
 2. 兼容性允许的情况下，推荐`flex`和`grid`可以适应更多复杂布局，更为灵活
 
-# 4. 栅格系统
+# 5. 栅格系统
 
 栅格系统是一种非常灵活的布局方式，许多框架如`bootstrap`等都对其进行了实现
 简易版

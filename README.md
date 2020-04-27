@@ -13,8 +13,9 @@
 
 1. [常见布局](./css/layout.md) :100:
 2. [居中方式](./css/center.md) :100:
-4. [BFC](./css/BFC.md) :curly_loop:
-3. [Flex](./css/BFC.md) :heavy_exclamation_mark:
+4. [BFC](./css/BFC.md) :100:
+4. [层叠上下文](./css/stacking.md) :100:
+3. [Flex](./css/BFC.md) :100:
 5. [预处理器](./css/BFC.md) :heavy_exclamation_mark:
 6. [雕虫小技](./css/BFC.md) :wavy_dash:
 

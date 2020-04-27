@@ -7,7 +7,7 @@
 <!-- TOC -->
 
 - [1. 水平居中](#1-%e6%b0%b4%e5%b9%b3%e5%b1%85%e4%b8%ad)
-  - [1.1. text-algin](#11-text-algin)
+  - [1.1. text-align](#11-text-align)
   - [1.2. margin](#12-margin)
   - [1.3. positon margin](#13-positon-margin)
   - [1.4. positon transform](#14-positon-transform)
@@ -33,13 +33,13 @@
 
 # 1. 水平居中
 
-## 1.1. text-algin
+## 1.1. text-align
 
 [text-algin](https://developer.mozilla.org/zh-CN/docs/Web/CSS/text-align) 定义行内内容如何相对它的块父元素对齐
 
 ```CSS
 .parnent{
-  text-algin:center;
+  text-align:center;
 }
 ```
 
@@ -132,7 +132,7 @@
 
 ```CSS
 .parent{
-  position: flex;
+  display: flex;
   justify-content: center;
 }
 ```
@@ -289,7 +289,7 @@
 
 ```CSS
 .parent{
-  position: flex;
+  display: flex;
   align-items: center;
 }
 ```
@@ -439,7 +439,7 @@
 
 ```CSS
 .parent{
-  position: flex;
+  display: flex;
   justify-content: center;
   align-items: center;
 }

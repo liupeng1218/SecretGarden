@@ -14,9 +14,8 @@
   - [4.2. BFC 范围](#42-bfc-%e8%8c%83%e5%9b%b4)
   - [4.3. BFC 影响](#43-bfc-%e5%bd%b1%e5%93%8d)
   - [4.4. BFC 作用](#44-bfc-%e4%bd%9c%e7%94%a8)
-    - [4.4.1. 阻止元素被浮动元素覆盖](#441-%e9%98%bb%e6%ad%a2%e5%85%83%e7%b4%a0%e8%a2%ab%e6%b5%ae%e5%8a%a8%e5%85%83%e7%b4%a0%e8%a6%86%e7%9b%96)
-    - [4.4.2. 包含浮动元素](#442-%e5%8c%85%e5%90%ab%e6%b5%ae%e5%8a%a8%e5%85%83%e7%b4%a0)
-    - [4.4.3. 阻止元素的 margin 合并](#443-%e9%98%bb%e6%ad%a2%e5%85%83%e7%b4%a0%e7%9a%84-margin-%e5%90%88%e5%b9%b6)
+    - [4.4.1. 包含浮动元素](#441-%e5%8c%85%e5%90%ab%e6%b5%ae%e5%8a%a8%e5%85%83%e7%b4%a0)
+    - [4.4.2. 阻止元素的 margin 合并](#442-%e9%98%bb%e6%ad%a2%e5%85%83%e7%b4%a0%e7%9a%84-margin-%e5%90%88%e5%b9%b6)
 
 <!-- /TOC -->
 
@@ -28,14 +27,14 @@ BFC 全称是 Block Formatting Context，即块格式化上下文。它是 CSS2.
 
 # 2. 视觉格式化模型
 
-视觉格式化模型(visual formatting model)是用来处理文档并将它显示在视觉媒体上的机制，它也是 CSS 中的一个概念。
-视觉格式化模型定义了盒（Box）的生成，盒主要包括了块盒、行内盒、匿名盒（没有名字不能被选择器选中的盒）以及一些实验性的盒（未来可能添加到规范中）。盒的类型由 display 属性决定。
+视觉格式化模型(visual formatting model)是用来**处理文档并将它显示在视觉媒体上的机制**，它也是 CSS 中的一个概念。
+视觉格式化模型定义了盒（Box）的生成，盒主要包括了块盒、行内盒、匿名盒（没有名字不能被选择器选中的盒）以及一些实验性的盒（未来可能添加到规范中）。盒的类型由 `display` 属性决定。
 
 ## 2.1. 块盒（block box）
 
 块盒有以下特性：
 
-- 当元素的 CSS 属性 display 为 block，list-item 或 table 时，它是块级元素 block-level；
+- 当元素的 CSS 属性 `display` 为 `block`，`list-item` 或 `table` 时，它是块级元素 block-level；
 - 视觉上呈现为块，竖直排列；
 - 块级盒参与(块格式化上下文)；
 - 每个块级元素至少生成一个块级盒，称为主要块级盒(principal block-level box)。一些元素，比如`<li>`，生成额外的盒来放置项目符号，不过多数元素只生成一个主要块级盒。
@@ -44,7 +43,7 @@ BFC 全称是 Block Formatting Context，即块格式化上下文。它是 CSS2.
 
 行内盒有以下特性：
 
-- 当元素的 CSS 属性 display 的计算值为 inline，inline-block 或 inline-table 时，称它为行内级元素；
+- 当元素的 CSS 属性 `display` 的计算值为 `inline`，`inline-block` 或 `inline-table` 时，称它为行内级元素；
 - 视觉上它将内容与其它行内级元素排列为多行；典型的如段落内容，有文本(可以有多种格式譬如着重)，或图片，都是行内级元素；
 - 行内级元素生成行内级盒(inline-level boxes)，参与行内格式化上下文(inline formatting context)。同时参与生成行内格式化上下文的行内级盒称为行内盒(inline boxes)。所有 display:inline 的非替换+ 元素生成的盒是行内盒；
 - 不参与生成行内格式化上下文的行内级盒称为原子行内级盒(atomic inline-level boxes)。这些盒由可替换行内元素，或 display 值为 inline-block 或 inline-table 的元素生成，不能拆分成多个盒；
@@ -63,7 +62,7 @@ BFC 全称是 Block Formatting Context，即块格式化上下文。它是 CSS2.
 </div>
 ```
 
-![anonymous](../assets/images/anonymousBox.png)
+![anonymous](../assets/images/css-anonymousBox.png)
 
 # 3. 定位方案
 
@@ -74,22 +73,22 @@ BFC 全称是 Block Formatting Context，即块格式化上下文。它是 CSS2.
 - 在常规流中，盒一个接着一个排列;
 - 在块级格式化上下文里面， 它们竖着排列；
 - 在行内格式化上下文里面， 它们横着排列;
-- 当 position 为 static 或 relative，并且 float 为 none 时会触发常规流；
-- 对于静态定位(static positioning)，position: static，盒的位置是常规流布局里的位置；
-- 对于相对定位(relative positioning)，position: relative，盒偏移位置由这些属性定义 top，bottom，leftandright。即使有偏移，仍然保留原有的位置，其它常规流不能占用这个位置。
+- 当 `position` 为 `static` 或 `relative`，并且 `float` 为 `none` 时会触发常规流；
+- 对于静态定位，`position`: `static`，盒的位置是常规流布局里的位置；
+- 对于相对定位，`position`: `relative`，盒偏移位置由这些属性定义 `top`，`bottom`，`left`，`right`。即使有偏移，仍然保留原有的位置，其它常规流不能占用这个位置。
 
 ## 3.2. 浮动定位
 
 - 盒称为浮动盒(floating boxes)；
 - 它位于当前行的开头或末尾；
-- 这导致常规流环绕在它的周边，除非设置 clear 属性；
+- 这导致常规流环绕在它的周边，除非设置 `clear` 属性；
 
 ## 3.3. 绝对定位(Absolute positioning)
 
 - 绝对定位方案，盒从常规流中被移除，不影响常规流的布局；
-- 它的定位相对于它的包含块，相关 CSS 属性：top，bottom，left 及 right；
-- 如果元素的属性 position 为 absolute 或 fixed，它是绝对定位元素；
-- 对于 position: absolute，元素定位将相对于最近的一个 relative、fixed 或 absolute 的父元素，如果没有则相对于 body；
+- 它的定位相对于它的包含块，相关 CSS 属性：`top`，`bottom`，`left` 及 `right`；
+- 如果元素的属性 `position` 为 `absolute` 或 `fixed`，它是绝对定位元素；
+- 对于 `position`: `absolute`，元素定位将相对于最近的一个 `relative`、`fixed` 或 `absolute` 的父元素，如果没有则相对于 `body`；
 
 # 4. 格式化上下文
 
@@ -109,8 +108,6 @@ BFC 全称是 Block Formatting Context，即块格式化上下文。它是 CSS2.
 
 ## 4.2. BFC 范围
 
-> A block formatting context contains everything inside of the element creating it that is not also inside a descendant element that creates a new block formatting context.
-
 一个 BFC 包含创建该上下文元素的所有子元素，但不包括创建了新 BFC 的子元素的内部元素。
 
 ```HTML
@@ -126,7 +123,7 @@ BFC 全称是 Block Formatting Context，即块格式化上下文。它是 CSS2.
 </div>
 ```
 
-class 名为`.BFC`代表创建了新的块格式化：
+`class` 名为`.BFC`代表创建了新的块格式化：
 `#div_1`创建了一个块格式上下文，这个上下文包括了`#div_2`、`#div_3`、`#div_4`、`#div_5`。即`#div_2`中的子元素也属于`#div_1`所创建的 BFC。但由于`#div_5`创建了新的 BFC，所以`#div_6`和`#div_7`就被排除在外层的 BFC 之外。
 
 **一个元素不能同时存在于两个 BFC 中**
@@ -142,18 +139,14 @@ BFC 的特性：
 3. 每个元素的 margin box 的左边，与容器块 border box 的左边相接触(对于从左往右的格式化，否则相反)。即使存在浮动也是如此；
 4. BFC 就是页面上的一个隔离的独立容器，容器里面的子元素不会影响到外面的元素，反之亦然；
 5. 计算 BFC 的高度时，考虑 BFC 所包含的所有元素，连浮动元素也参与计算；
-6. 浮动盒区域不叠加到 BFC 上；
+6. 浮动盒区域不叠加到 BFC 上（浮动产生的 BFC 不会与其他内容重叠）；
 
 ## 4.4. BFC 作用
 
-### 4.4.1. 阻止元素被浮动元素覆盖
-
-利用特性 6**浮动盒区域不叠加到 BFC 上**，因此可以设置一个元素触发 BFC，以阻止被浮动盒子覆盖。
-
-### 4.4.2. 包含浮动元素
+### 4.4.1. 包含浮动元素
 
 利用特性 5**计算 BFC 的高度时，考虑 BFC 所包含的所有元素，连浮动元素也参与计算**，通过改变包含浮动子元素的父盒子的属性值，触发 BFC，以此来包含子元素的浮动盒子。
 
-### 4.4.3. 阻止元素的 margin 合并
+### 4.4.2. 阻止元素的 margin 合并
 
 利用特性 4**BFC 就是页面上的一个隔离的独立容器，容器里面的子元素不会影响到外面的元素**，处理外边距合并的情况
