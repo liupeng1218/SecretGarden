@@ -1,5 +1,5 @@
 **CSS 居中**
-总结了网页中常见的水平，垂直和水平垂直的居中方式，每种居中模式都整理的常用的方法和场景。[线上 demo](https://liupeng1218.github.io/SecretGardenDemo/css/layout-center.html)
+总结了网页中常见的水平，垂直和水平垂直的居中方式，每种居中模式都整理的常用的方法和场景。[线上 demo](https://codepen.io/liupeng1991/pen/rNOwjWq)
 
 > 参考文档 [MDN](https://developer.mozilla.org)
 > 参考文档 [兼容性](https://caniuse.com/)

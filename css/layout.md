@@ -50,7 +50,7 @@
 
 # 1. 两列布局
 
-两列布局是常见的基础布局之一，常见为一侧定宽，另一侧自适应。还有一种为一列不定宽，一列自适应。[线上 demo](https://liupeng1218.github.io/SecretGardenDemo/css/layout-two_columns.html)
+两列布局是常见的基础布局之一，常见为一侧定宽，另一侧自适应。还有一种为一列不定宽，一列自适应。[线上 demo](https://codepen.io/liupeng1991/pen/pojwRjp)
 
 公共样式
 
@@ -378,7 +378,7 @@
 
 # 2. 三列布局
 
-[三列布局线上 demo](https://liupeng1218.github.io/SecretGardenDemo/css/layout-three_columns.html)
+[三列布局线上 demo](https://codepen.io/liupeng1991/pen/pojwREL)
 公共样式
 
 ```CSS
@@ -876,7 +876,7 @@
 
 # 3. 多列布局
 
-[多列布局线上 demo](https://liupeng1218.github.io/SecretGardenDemo/css/layout-multi_columns.html)
+[多列布局线上 demo](https://codepen.io/liupeng1991/pen/xxwrgEe)
 公共样式
 
 ```CSS
@@ -1037,7 +1037,7 @@
 
 # 4. 九宫格布局
 
-[九宫格布局线上 demo](https://liupeng1218.github.io/SecretGardenDemo/css/layout-sudoku.html)
+[九宫格布局线上 demo](https://codepen.io/liupeng1991/pen/gOaRgLw)
 
 ## 4.1. table
 
