@@ -7,8 +7,6 @@
 :wavy_dash: ：持续更新
 :100: ：已完成
 
-![FE-mind](./assets/images/FE-mind.png)
-
 ### CSS
 
 1. [常见布局](./css/layout.md) :100:
@@ -21,24 +19,25 @@
 
 ### JavaScript
 
-1. [基础](./javascript/basic.md) :heavy_exclamation_mark:
-   - 数据类型 :heavy_exclamation_mark:
-   - 执行上下文/作用域链/闭包 :heavy_exclamation_mark:
-   - 原型/原型链 :heavy_exclamation_mark:
-   - 继承 :heavy_exclamation_mark:
-   - call/apply/ind :heavy_exclamation_mark:
-   - this :heavy_exclamation_mark:
-   - new :heavy_exclamation_mark:
+1. [基础](./javascript/basic.md) :100:
+   - 数据类型 :100:
+   - 执行上下文/作用域链 :100:
+   - 闭包 :100:
+   - 原型/原型链 :100:
+   - 继承 :100:
+   - this :100:
+   - new :100:
+   - call/apply/ind :100:
 2. [进阶](./javascript/advance.md) :heavy_exclamation_mark:
-   - 异步 :heavy_exclamation_mark:
-   - Eventloop :heavy_exclamation_mark:
-   - 模块化 :heavy_exclamation_mark:
-   - 深浅拷贝 :heavy_exclamation_mark:
-   - 正则表达式 :heavy_exclamation_mark:
-3. [标准库](./javascript/stdlib.md) :heavy_exclamation_mark:
-4. [ES6](./javascript/es6.md) :heavy_exclamation_mark:
-5. [工具库](./javascript/es6.md) :heavy_exclamation_mark:
-6. [雕虫小技](./javascript/es6.md) :heavy_exclamation_mark:
+   - 深浅拷贝 :100:
+   - JSON实现 :100:
+   - 异步编程 :100:
+   - Eventloop :100:
+   - 模块化 :100:
+3. [标准库](./javascript/stdlib.md) :100:
+4. [ES+](./javascript/es6.md) :100:
+4. [函数式编程](./javascript/function.md) :heavy_exclamation_mark:
+5. [雕虫小技](./javascript/skill.md) :wavy_dash:
 
 ### 主流框架
 
@@ -74,6 +73,15 @@
    - 安全 :heavy_exclamation_mark:
 2. [URL 到页面](./javascript/basic.md) :heavy_exclamation_mark:
 
+### 网络
+
+1. [网络](./engineering/performance.md) :heavy_exclamation_mark:
+   - HTTP :heavy_exclamation_mark:
+   - HTTPS :heavy_exclamation_mark:
+   - HTTP2 :heavy_exclamation_mark:
+   - DNS :heavy_exclamation_mark:
+   - TCP :heavy_exclamation_mark:
+
 ### 工程化
 
 1. [规范](./engineering/standard.md) :heavy_exclamation_mark:
@@ -90,14 +98,7 @@
 
 1. [基础](./node/basic.md) :heavy_exclamation_mark:
 
-### 网络
 
-1. [网络](./engineering/performance.md) :heavy_exclamation_mark:
-   - HTTP :heavy_exclamation_mark:
-   - HTTPS :heavy_exclamation_mark:
-   - HTTP2 :heavy_exclamation_mark:
-   - DNS :heavy_exclamation_mark:
-   - TCP :heavy_exclamation_mark:
 
 ### 设计模式
 

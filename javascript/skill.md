@@ -1,17 +1,19 @@
 <!-- TOC -->
 
-- [数组](#数组)
-  - [扁平化](#扁平化)
-  - [去重](#去重)
-  - [排序](#排序)
-  - [最值](#最值)
-- [类数组转化](#类数组转化)
+- [1. 数组](#1-%e6%95%b0%e7%bb%84)
+  - [1.1. 扁平化](#11-%e6%89%81%e5%b9%b3%e5%8c%96)
+  - [1.2. 去重](#12-%e5%8e%bb%e9%87%8d)
+  - [1.3. 排序](#13-%e6%8e%92%e5%ba%8f)
+  - [1.4. 最值](#14-%e6%9c%80%e5%80%bc)
+- [2. 类数组转化](#2-%e7%b1%bb%e6%95%b0%e7%bb%84%e8%bd%ac%e5%8c%96)
+- [3. forEach 的 return](#3-foreach-%e7%9a%84-return)
+- [4. JS 判断是否包含值](#4-js-%e5%88%a4%e6%96%ad%e6%98%af%e5%90%a6%e5%8c%85%e5%90%ab%e5%80%bc)
 
 <!-- /TOC -->
 
-# 数组
+# 1. 数组
 
-## 扁平化
+## 1.1. 扁平化
 
 初级
 利用递归和`concat`结构实现逐级扁平
@@ -38,7 +40,7 @@ flatten([1,[2,3,[4,5]]) //[1,2,3,4,5]
 [1[2,3,[4,5[...]].flat(Infinity) //[1,2,3,4...n]
 ```
 
-## 去重
+## 1.2. 去重
 
 初级
 
@@ -69,7 +71,7 @@ Array.from(new Set([1,2,3,3,4,4])) //[1,2,3,4]
 [...new Set([1,2,3,3,4,4])] //[1,2,3,4]
 ```
 
-## 排序
+## 1.3. 排序
 
 初级
 冒泡排序
@@ -102,7 +104,7 @@ Array.prototype.bubleSort=function () {
 
 ```
 
-## 最值
+## 1.4. 最值
 
 初级
 先排序再取值
@@ -115,7 +117,7 @@ Math.max(...[1,2,3,4]) //4
 Math.max.apply(this,[1,2,3,4]) //4
 ```
 
-# 类数组转化
+# 2. 类数组转化
 
 函数中的`arguments`，使用`getElementsByTagName`获取的`HTMLCollection`，一级使用`querySeleor`获取的`nodeList`都是类数组对象
 它们都从 0 开始开裂，有`length`属性，但是不是数组，数组的很多方法也不能调用
@@ -161,5 +163,58 @@ function sum(a, b) {
   console.log(args.reduce((sum, cur) => sum + cur));//args可以调用数组原生的方法啦
 }
 sum(1, 2);//3
+
+```
+
+# 3. forEach 的 return
+
+在`forEach`中使用`return`不会中断循环
+
+**方法**
+
+1. 使用`try`监视，需要中断时抛出异常
+2. 使用`every`和`some`方式替换代替`forEach`
+
+# 4. JS 判断是否包含值
+
+1. array.indexOf
+
+```JS
+var arr=[1,2,3,4];
+var index=arr.indexOf(3);
+console.log(index);
+
+```
+
+2. array.includes
+
+```JS
+var arr=[1,2,3,4];
+if(arr.includes(3))
+    console.log("存在");
+else
+    console.log("不存在");
+
+```
+
+3. array.find
+
+```JS
+var arr=[1,2,3,4];
+var result = arr.find(item =>{
+    return item > 3
+});
+console.log(result);
+
+```
+
+4. array.findIndex
+
+```JS
+var arr=[1,2,3,4];
+var result = arr.findIndex(item =>{
+    return item > 3
+});
+console.log(result);
 
 ```
