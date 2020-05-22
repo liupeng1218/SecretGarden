@@ -36,7 +36,7 @@
    - 模块化 :100:
 3. [标准库](./javascript/stdlib.md) :100:
 4. [ES+](./javascript/es6.md) :100:
-4. [函数式编程](./javascript/function.md) :heavy_exclamation_mark:
+4. [函数式编程](./javascript/function.md) :100:
 5. [雕虫小技](./javascript/skill.md) :wavy_dash:
 
 ### 主流框架
