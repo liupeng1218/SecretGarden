@@ -1,155 +1,61 @@
 <!-- TOC -->
 
-- [MVVM](#mvvm)
-- [响应式原理](#%e5%93%8d%e5%ba%94%e5%bc%8f%e5%8e%9f%e7%90%86)
-  - [Object.defineProperty 的缺陷](#objectdefineproperty-%e7%9a%84%e7%bc%ba%e9%99%b7)
+- [运行机制](#运行机制)
+  - [初始化流程](#初始化流程)
+  - [响应式流程](#响应式流程)
+- [编译过程](#编译过程)
+- [Object.defineProperty/proxy](#objectdefinepropertyproxy)
+  - [Object.defineProperty 的缺陷](#objectdefineproperty-的缺陷)
   - [proxy](#proxy)
-  - [编译过程](#%e7%bc%96%e8%af%91%e8%bf%87%e7%a8%8b)
-- [Virtual DOM](#virtual-dom)
 - [Route](#route)
-  - [Hash 模式](#hash-%e6%a8%a1%e5%bc%8f)
-  - [History 模式](#history-%e6%a8%a1%e5%bc%8f)
-  - [对比](#%e5%af%b9%e6%af%94)
-- [生命周期](#%e7%94%9f%e5%91%bd%e5%91%a8%e6%9c%9f)
-- [组件通信](#%e7%bb%84%e4%bb%b6%e9%80%9a%e4%bf%a1)
-  - [父子通信](#%e7%88%b6%e5%ad%90%e9%80%9a%e4%bf%a1)
-  - [兄弟通信](#%e5%85%84%e5%bc%9f%e9%80%9a%e4%bf%a1)
-  - [跨多层通信](#%e8%b7%a8%e5%a4%9a%e5%b1%82%e9%80%9a%e4%bf%a1)
+  - [Hash 模式](#hash-模式)
+  - [History 模式](#history-模式)
+  - [对比](#对比)
+- [生命周期](#生命周期)
+- [组件通信](#组件通信)
+  - [父子通信](#父子通信)
+  - [兄弟通信](#兄弟通信)
+  - [跨多层通信](#跨多层通信)
   - [Event Bus](#event-bus)
   - [Vuex](#vuex)
-- [computed 和 watch](#computed-%e5%92%8c-watch)
-  - [computed 的实现原理](#computed-%e7%9a%84%e5%ae%9e%e7%8e%b0%e5%8e%9f%e7%90%86)
-- [keep-alive](#keep-alive)
-- [v-show 与 v-if](#v-show-%e4%b8%8e-v-if)
-- [组件中 data 使用函数](#%e7%bb%84%e4%bb%b6%e4%b8%ad-data-%e4%bd%bf%e7%94%a8%e5%87%bd%e6%95%b0)
-- [nextTick](#nexttick)
+- [最佳实践](#最佳实践)
+  - [computed 和 watch](#computed-和-watch)
+  - [key](#key)
+  - [keep-alive](#keep-alive)
+  - [v-show 与 v-if](#v-show-与-v-if)
+  - [组件中 data 使用函数](#组件中-data-使用函数)
+  - [nextTick](#nexttick)
+- [3.0](#30)
 
 <!-- /TOC -->
 
+# 运行机制
 
-# MVVM
+> [MVVM](../assets/images/frame-mvvm.jpg)
 
-传统的 `MVC` 架构通常是使用控制器更新模型，视图从模型中获取数据去渲染。当用户有输入时，会通过控制器去更新模型，并且通知视图进行更新。
+## 初始化流程
 
-![MVC](../assets/images/MVC.png)
+1. 创建 `Vue` 实例对象
+2. `init` 过程会初始化生命周期，初始化事件中心，初始化渲染、执行`beforeCreate`周期函数、初始化 `data`、`props`、`computed`、`watche`r、执行`created`周期函数等。
+3. 初始化后，调用`$mount`方法对`Vue`实例进行挂载（挂载的核心过程包括模板编译、渲染以及更新三个过程）。
+4. 如果没有在 Vue 实例上定义`render`方法而是定义了`template`，那么需要经历编译阶段。需要先将`template`字符串编译成 `render function`，`template` 字符串编译步骤如下 ：
+   1. `parse` 正则解析 `template` 字符串形成 `AST`（抽象语法树，是源代码的抽象语法结构的树状表现形式）
+   2. `optimize` 标记静态节点跳过`diff`算法（`diff`算法是逐层进行比对，只有同层级的节点进行比对，因此时间的复杂度只有`O(n)`。如果对于时间复杂度不是很清晰的，可以查看我写的文章
+   3. `generate`将`AST`转化成`render function`字符串
+5. 编译成`render function` 后，调用`$mount`的`mountComponen`t 方法，先执行`beforeMount`钩子函数，然后核心是实例化一个渲染`Watcher`，在它的回调函数（初始化的时候执行，以及组件实例中监测到数据发生变化时执行）中调用`updateComponent`方法（此方法调用`render`方法生成虚拟`Node`，最终调用`update`方法更新`DOM`）。
+6. 调用`render`方法将`render function`渲染成虚拟的`Node`（真正的 `DOM` 元素是非常庞大的，因为浏览器的标准就把 `DOM` 设计的非常复杂。如果频繁的去做 `DOM` 更新，会产生一定的性能问题，而 Virtual `DOM` 就是用一个原生的 `JavaScript` 对象去描述一个 `DOM` 节点，所以它比创建一个 `DOM` 的代价要小很多，而且修改属性也很轻松，还可以做到跨平台兼容），`render`方法的第一个参数是 createElement(或者说是 h 函数)，这个在官方文档也有说明。
+7. 生成虚拟`DOM`树后，需要将虚拟`DOM`树转化成真实的`DOM`节点，此时需要调用`update`方法，`update`方法又会调用 `pacth` 方法把虚拟`DOM`转换成真正的`DOM`节点。需要注意在图中忽略了新建真实`DOM`的情况（如果没有旧的虚拟`Node`，那么可以直接通过 `createElm` 创建真实`DOM`节点），这里重点分析在已有虚拟`Node`的情况下，会通过 `sameVnode` 判断当前需要更新的`Node`节点是否和旧的`Node`节点相同（例如我们设置的 key 属性发生了变化，那么节点显然不同），如果节点不同那么将旧节点采用新节点替换即可，如果相同且存在子节点，需要调用 `patchVNode` 方法执行 `diff` 算法更新`DOM`，从而提升`DOM`操作的性能。
 
-在 `MVVM` 架构中，引入了 `ViewModel` 的概念。ViewModel 只关心数据和业务的处理，不关心 `View` 如何处理数据，在这种情况下，`View` 和 `Model` 都可以独立出来，任何一方改变了也不一定需要改变另一方，并且可以将一些可复用的逻辑放在一个 `ViewModel` 中，让多个 View 复用这个 `ViewModel`。
-对于 MVVM 来说，最重要的并不是通过双向绑定或者其他的方式将 View 与 ViewModel 绑定起来，而是通过 ViewModel 将视图中的状态和用户的行为分离出一个抽象，这才是 MVVM 的精髓。
+> 需要注意在初始化阶段，没有详细描述数据的响应式过程，这个在响应式流程里做说明。
 
-![MVVM](../assets/images/MVVM.png)
+## 响应式流程
 
-以 Vue 框架来举例，ViewModel 就是组件的实例。View 就是模板，Model 的话在引入 Vuex 的情况下是完全可以和组件分离的。
+1. 在 `init` 的时候会利用 `Object.defineProperty` 方法（不兼容 IE8）监听 `Vue` 实例的响应式数据的变化从而实现数据劫持能力（利用了 `JavaScript` 对象的访问器属性 `get` 和 `set`，在未来的 `Vue3` 中会使用 `ES6` 的 `Proxy` 来优化响应式原理）。在初始化流程中的编译阶段，当 `render function` 被渲染的时候，会读取 Vue 实例中和视图相关的响应式数据，此时会触发 `getter` 函数进行依赖收集（将观察者 `Watcher` 对象存放到当前闭包的订阅者 `Dep` 的 `subs` 中），此时的数据劫持功能和观察者模式就实现了一个 `MVVM` 模式中的 `Binder`，之后就是正常的渲染和更新流程。
+2. 当数据发生变化或者视图导致的数据发生了变化时，会触发数据劫持的 `setter` 函数，`setter` 会通知初始化依赖收集中的 `Dep` 中的和视图相应的 `Watcher`，告知需要重新渲染视图，`Wather` 就会再次通过 `update` 方法来更新视图。
 
+可以发现只要视图中添加监听事件，自动变更对应的数据变化时，就可以实现数据和视图的双向绑定了。
 
-
-# 响应式原理
-
-> [响应式原理](https://juejin.im/post/5abdd6f6f265da23793c4458)
-
-Vue 是采用**数据劫持**结合**发布订阅模式**，通过`Object.defineProperty()`来劫持各个属性的 `getter`,`setter`, 在数据变动时发布消息给订阅者，触发相应的回调函数，从而实现数据双向绑定
-
-Vue 主要通过以下 4 个步骤来实现数据双向绑定的：
-
-1. 实现一个监听器 `Observer` ：对数据对象进行遍历，包括子属性对象的属性，利用 `Object.defineProperty()` 对属性都加上 `setter` 和 `getter`。这样的话，给这个对象的某个值赋值，就会触发 `setter`，那么就能监听到了数据变化。
-2. 实现一个解析器 `Compile` ：解析 Vue 模板指令，将模板中的变量都替换成数据，然后初始化渲染页面视图，并将每个指令对应的节点绑定更新函数，添加监听数据的订阅者，一旦数据有变动，收到通知，调用更新函数进行数据更新。
-3. 实现一个订阅者 `Watcher` ：`Watcher` 订阅者是 `Observer` 和 `Compile` 之间通信的桥梁 ，主要的任务是订阅 `Observer` 中的属性值变化的消息，当收到属性值变化的消息时，触发解析器 `Compile` 中对应的更新函数。
-4. 实现一个订阅器 `Dep` ：订阅器采用 发布-订阅 设计模式，用来收集订阅者 `Watcher`，对监听器 `Observer` 和 订阅者 `Watcher` 进行统一管理。
-
-```JS
-var data = { name: 'yck' }
-observe(data)
-let name = data.name // -> get value
-data.name = 'yyy' // -> change value
-
-function observe(obj) {
-  // 判断类型
-  if (!obj || typeof obj !== 'object') {
-    return
-  }
-  Object.keys(obj).forEach(key => {
-    defineReactive(obj, key, obj[key])
-  })
-}
-
-function defineReactive(obj, key, val) {
-  // 递归子属性
-  observe(val)
-  let dp = new Dep()
-  Object.defineProperty(obj, key, {
-    enumerable: true,
-    configurable: true,
-    get: function reactiveGetter() {
-      console.log('get value')
-      // 将 Watcher 添加到订阅
-      if (Dep.target) {
-        dp.addSub(Dep.target)
-      }
-      return val
-    },
-    set: function reactiveSetter(newVal) {
-      console.log('change value')
-      val = newVal
-      // 执行 watcher 的 update 方法
-      dp.notify()
-    }
-  })
-}
-
-// 实现一个 Dep 类，用于解耦属性的依赖收集和派发更新操作。
-// 通过 Dep 解耦属性的依赖和更新操作
-class Dep {
-  constructor() {
-    this.subs = []
-  }
-  // 添加依赖
-  addSub(sub) {
-    this.subs.push(sub)
-  }
-  // 更新
-  notify() {
-    this.subs.forEach(sub => {
-      sub.update()
-    })
-  }
-}
-// 全局属性，通过该属性配置 Watcher
-Dep.target = null
-
-// 在组件挂载时，会先对所有需要的属性调用 Object.defineProperty()，然后实例化 Watcher，传入组件更新的回调。在实例化过程中，会对模板中的属性进行求值，触发依赖收集。
-class Watcher {
-  constructor(obj, key, cb) {
-    // 将 Dep.target 指向自己
-    // 然后触发属性的 getter 添加监听
-    // 最后将 Dep.target 置空
-    Dep.target = this
-    this.cb = cb
-    this.obj = obj
-    this.key = key
-    this.value = obj[key]
-    Dep.target = null
-  }
-  update() {
-    // 获得新值
-    this.value = this.obj[this.key]
-    // 调用 update 方法更新 Dom
-    this.cb(this.value)
-  }
-}
-```
-
-## Object.defineProperty 的缺陷
-
-如果通过下标方式修改数组数据或者给对象新增属性并不会触发组件的重新渲染，因为 `Object.defineProperty`不能拦截到这些操作，更精确的来说，对于数组而言，大部分操作都是拦截不到的，只是 Vue 内部通过重写函数的方式解决了这个问题。
-
-## proxy
-
-- Proxy 可以直接监听对象而非属性；
-- Proxy 可以直接监听数组的变化；
-- Proxy 有多达 13 种拦截方法,不限于 `apply` 、 `ownKeys` 、 `deleteProperty` 、`has` 等等是 `Object.defineProperty` 不具备的；
-- Proxy 返回的是一个新对象,我们可以只操作新的对象达到目的,而 `Object.defineProperty` 只能遍历对象属性直接修改；
-- Proxy 作为新标准将受到浏览器厂商重点持续的性能优化，也就是传说中的新标准的性能红利；
-
-## 编译过程
+# 编译过程
 
 Vue 会通过编译器将模板通过几个阶段最终编译为 `render` 函数，然后通过执行 `render` 函数生成 `Virtual DOM` 最终映射为真实 `DOM`。
 这个过程其中又分为三个阶段，分别为：
@@ -185,15 +91,23 @@ Vue 会通过编译器将模板通过几个阶段最终编译为 `render` 函数
 
 最后一个阶段就是通过 AST 生成 render 函数了。其实这一阶段虽然分支有很多，但是最主要的目的就是遍历整个 AST，根据不同的条件生成不同的代码罢了。
 
-# Virtual DOM
+# Object.defineProperty/proxy
 
-> [虚拟DOM](https://juejin.im/post/5d36cc575188257aea108a74#heading-14)
+## Object.defineProperty 的缺陷
 
-虚拟 DOM 的实现原理主要包括以下 3 部分：
+如果通过下标方式修改数组数据或者给对象新增属性并不会触发组件的重新渲染，因为 `Object.defineProperty`不能拦截到这些操作，更精确的来说，对于数组而言，大部分操作都是拦截不到的，只是 Vue 内部通过重写函数的方式解决了这个问题。
 
-- 用 JavaScript 对象模拟真实 DOM 树，对真实 DOM 进行抽象；
-- diff 算法 — 比较两棵虚拟 DOM 树的差异；
-- pach 算法 — 将两个虚拟 DOM 对象的差异应用到真正的 DOM 树。
+## proxy
+
+`Proxy` 和 `Object.defineProperty` 的使用方法看似很相似，其实 `Proxy` 是在 「更高维度」 上去拦截属性的修改的
+
+- Proxy 可以直接监听对象而非属性；
+- Proxy 可以直接监听数组的变化；
+- Proxy 有多达 13 种拦截方法,不限于 `apply` 、 `ownKeys` 、 `deleteProperty` 、`has` 等等是 `Object.defineProperty` 不具备的；
+- Proxy 返回的是一个新对象,我们可以只操作新的对象达到目的,而 `Object.defineProperty` 只能遍历对象属性直接修改；
+- Proxy 作为新标准将受到浏览器厂商重点持续的性能优化，也就是传说中的新标准的性能红利；
+
+
 
 # Route
 
@@ -334,7 +248,9 @@ created() {
 
 `Vuex` 可以完美处理数据管理等需求，在中大型项目中可以引入
 
-# computed 和 watch
+# 最佳实践
+
+## computed 和 watch
 
 computed 是计算属性，依赖其他属性计算值，并且 computed 的值有缓存，只有当计算值变化才会返回内容。
 
@@ -342,31 +258,29 @@ watch 监听到值的变化就会执行回调，在回调中可以进行一些�
 
 所以一般来说需要依赖别的属性来动态获得值的时候可以使用 computed，对于监听到值的变化需要做一些复杂业务逻辑的情况可以使用 watch。
 
-## computed 的实现原理
+## key
 
-`computed` 本质是一个惰性求值的观察者。
-`computed` 内部实现了一个惰性的 `watcher`,也就是 `computed watcher`,`computed watcher` 不会立刻求值,同时持有一个 `dep` 实例。
-其内部通过 `this.dirty` 属性标记计算属性是否需要重新求值。
-当 `computed` 的依赖状态发生改变时,就会通知这个惰性的 `watcher`,
-`computed watcher` 通过 `this.dep.subs.length` 判断有没有订阅者,
-有的话,会重新计算,然后对比新旧值,如果变化了,会重新渲染。 (Vue 想确保不仅仅是计算属性依赖的值发生变化，而是当计算属性最终计算的值发生变化时才会触发渲染 `watcher` 重新渲染，本质上是一种优化。)
-没有的话,仅仅把 `this.dirty = true`。 (当计算属性依赖于其他数据时，属性并不会立即重新计算，只有之后其他地方需要读取属性的时候，它才会真正计算，即具备 lazy（懒计算）特性。)
+`key` 是给每一个 `vnode` 的唯一 `id`,依靠 `key`,我们的 `diff` 操作可以更准确、更快速 (对于简单列表页渲染来说 `diff` 节点也更快,但会产生一些隐藏的副作用,比如可能不会产生过渡效果,或者在某些节点有绑定数据（表单）状态，会出现状态错位。)
 
-# keep-alive
+## keep-alive
 
-如果你需要在组件切换的时候，保存一些组件的状态防止多次渲染，就可以使用 keep-alive 组件包裹需要保存的组件。
+keep-alive 是 Vue 内置的一个组件，可以使被包含的组件保留状态，避免重新渲染 ，其有以下特性：
 
-# v-show 与 v-if
+一般结合路由和动态组件一起使用，用于缓存组件；
+提供 include 和 exclude 属性，两者都支持字符串或正则表达式， include 表示只有名称匹配的组件会被缓存，exclude 表示任何名称匹配的组件都不会被缓存 ，其中 exclude 的优先级比 include 高；
+对应两个钩子函数 activated 和 deactivated ，当组件被激活时，触发钩子函数 activated，当组件被移除时，触发钩子函数 deactivated。
+
+## v-show 与 v-if
 
 v-show 只是在 `display: none` 和 `display: block` 之间切换。无论初始条件是什么都会被渲染出来，后面只需要切换 CSS，DOM 还是一直保留着的。所以总的来说 v-show 在初始渲染时有更高的开销，但是切换开销很小，更适合于频繁切换的场景。
 
 v-if 当属性初始为 false 时，组件就不会被渲染，直到条件为 true，并且切换条件时会触发销毁 / 挂载组件，所以总的来说在切换时开销更高，更适合不经常切换的场景。
 
-# 组件中 data 使用函数
+## 组件中 data 使用函数
 
 组件复用时所有组件实例都会共享 data，如果 data 是对象的话，就会造成一个组件修改 data 以后会**影响到其他所有组件**，所以需要将 data 写成函数，每次用到就调用一次函数获得新的数据。
 
-# nextTick
+## nextTick
 
 `Vue` 在更新 DOM 时是异步执行的。只要侦听到数据变化，`Vue` 将开启一个队列，并缓冲在同一事件循环中发生的所有数据变更。
 如果同一个 `watcher` 被多次触发，只会被推入到队列中一次。这种在缓冲时去除重复数据对于避免不必要的计算和 DOM 操作是非常重要的。
@@ -377,3 +291,5 @@ vue 的 `nextTick` 方法的实现原理:
 - vue 用异步队列的方式来控制 DOM 更新和 `nextTick` 回调先后执行
 - microtask 因为其高优先级特性，能确保队列中的微任务在一次事件循环前被执行完毕
 - 考虑兼容问题,vue 做了 microtask 向 macrotask 的降级方案
+
+# 3.0
