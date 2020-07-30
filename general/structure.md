@@ -285,7 +285,7 @@ class LinkList {
 树拥有很多种结构，二叉树是树中最常用的结构，同时也是一个天然的递归结构。
 二叉树拥有一个根节点，每个节点至多拥有两个子节点，分别为：左节点和右节点。树的最底部节点称之为叶节点，当一颗树的叶数量数量为满时，该树可以称之为满二叉树。
 
-![binaryTree](../assets/images/binaryTree.png)
+![binaryTree](../assets/images/structure-binaryTree.png)
 
 ## 二分搜索树
 
@@ -293,7 +293,7 @@ class LinkList {
 
 这种存储方式很适合于数据搜索。如下图所示，当需要查找 6 的时候，因为需要查找的值比根节点的值大，所以只需要在根节点的右子树上寻找，大大提高了搜索效率。
 
-![binarySearchTree](../assets/images/binarySearchTree.png)
+![binarySearchTree](../assets/images/structure-binarySearchTree.png)
 
 ### 实现
 
@@ -569,7 +569,7 @@ AVL 树改进了二分搜索树，在 AVL 树中任意节点的左右子树的�
 
 对于 AVL 树来说，添加节点会有四种情况
 
-![AVLTreee](../assets/images/AVLTreee.png)
+![AVLTreee](../assets/images/structure-AVLTreee.png)
 
 对于左左情况来说，新增加的节点位于节点 2 的左侧，这时树已经不平衡，需要旋转。因为搜索树的特性，节点比左节点大，比右节点小，所以旋转以后也要实现这个特性。
 
@@ -861,7 +861,7 @@ shiftUp 的核心思路是一路将节点与父节点对比大小，如果比父
 
 shiftDown 的核心思路是先将根节点和末尾交换位置，然后移除末尾元素。接下来循环判断父节点和两个子节点的大小，如果子节点大，就把最大的子节点和父节点交换。
 
-![BigRootPile](../assets/images/BigRootPile.png)
+![BigRootPile](../assets/images/structure-BigRootPile.png)
 
 ```JS
 class MaxHeap {

@@ -293,7 +293,7 @@ JSONP 使用简单兼容性好，但是**只限于 get 请求**。
 
 `Cache-Control` 出现于 `HTTP/1.1`，优先级高于 `Expires` 。该属性值表示资源会在 30 秒后过期，需要再次请求。
 
-![Cache-Control](../assets/images/Cache-Control.png)
+![Cache-Control](../assets/images/browser-CacheControl.png)
 
 ### 协商缓存
 

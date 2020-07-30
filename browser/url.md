@@ -148,7 +148,7 @@ tcp 将 http 长报文划分为短报文，通过三次握手与服务端建立�
 5. 绘制 render 树（paint），绘制页面像素信息
 6. 浏览器会将各层的信息发送给 GPU，GPU 会将各层合成（composite），显示在屏幕上
 
-![browser_rending](../assets/images/browser_rending.png)
+![browser_rending](../assets/images/browser-rending.png)
 
 ### 解析 HTML，构建 DOM 树
 
@@ -166,7 +166,7 @@ tcp 将 http 长报文划分为短报文，通过三次握手与服务端建立�
 ### 生成 render 树
 
 当我们生成 DOM 树和 CSSOM 树以后，就需要将这两棵树组合为渲染树。
-![RENDING](../assets/images/browser_rend.png)
+![RENDING](../assets/images/browser-rend.png)
 
 ### 渲染
 
