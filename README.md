@@ -76,7 +76,7 @@
 
 1. [规范](./engineering/standard.md) :wavy_dash:
 2. [webpack](./engineering/webpack.md) :100:
-3. [TypeScript](./engineering/TypeScript.md) :heavy_exclamation_mark:
+3. [TypeScript](./engineering/TypeScript.md) :100:
 
 ### 性能
 
