@@ -2,20 +2,16 @@
 
 > Traveling light
 
-:heavy_exclamation_mark: ：待完成
-:curly_loop: ：撰写中
-:wavy_dash: ：持续更新
-:100: ：已完成
+:heavy_exclamation_mark: ：待完成 :curly_loop: ：撰写中 :wavy_dash: ：持续更新 :100: ：已完成
 
 ### CSS
 
 1. [常见布局](./css/layout.md) :100:
 2. [居中方式](./css/center.md) :100:
-3. [BFC](./css/BFC.md) :100:
-4. [层叠上下文](./css/stacking.md) :100:
-5. [Flex](./css/flex.md) :100:
-6. [预处理器](./css/less.md) :100:
-7. [雕虫小技](./css/skill.md) :wavy_dash:
+3. [BFC&层叠上下文](./css/BFC.md) :100:
+4. [Flex](./css/flex.md) :100:
+5. [预处理器](./css/less.md) :100:
+6. [雕虫小技](./css/skill.md) :wavy_dash:
 
 ### JavaScript
 
@@ -30,6 +26,7 @@
    - call/apply/ind :100:
 2. [进阶](./javascript/advance.md) :100:
    - 深浅拷贝 :100:
+   - 防抖/节流 :100:
    - JSON 实现 :100:
    - 异步编程 :100:
    - Eventloop :100:
@@ -71,7 +68,6 @@
    - 1px :100:
 2. [雕虫小技](./moble/skill.md) :wavy_dash:
 
-
 ### 工程化
 
 1. [规范](./engineering/standard.md) :wavy_dash:
@@ -80,7 +76,12 @@
 
 ### 性能
 
-1. [缓存](./performance/performance.md) :heavy_exclamation_mark:
+1. [性能](./performance/performance.md) :wavy_dash:
+   - 静态文件
+   - 图片
+   - 缓存
+   - CDN
+   - 按需加载/懒加载
 
 ### Node
 

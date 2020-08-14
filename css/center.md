@@ -1,35 +1,33 @@
-**CSS 居中**
-总结了网页中常见的水平，垂直和水平垂直的居中方式，每种居中模式都整理的常用的方法和场景。[线上 demo](https://codepen.io/liupeng1991/pen/rNOwjWq)
-
-> 参考文档 [MDN](https://developer.mozilla.org)
-> 参考文档 [兼容性](https://caniuse.com/)
-
 <!-- TOC -->
 
-- [1. 水平居中](#1-%e6%b0%b4%e5%b9%b3%e5%b1%85%e4%b8%ad)
+- [1. 水平居中](#1-水平居中)
   - [1.1. text-align](#11-text-align)
   - [1.2. margin](#12-margin)
   - [1.3. positon margin](#13-positon-margin)
   - [1.4. positon transform](#14-positon-transform)
   - [1.5. flex](#15-flex)
-  - [1.6. 小结](#16-%e5%b0%8f%e7%bb%93)
-- [2. 垂直居中](#2-%e5%9e%82%e7%9b%b4%e5%b1%85%e4%b8%ad)
+  - [1.6. 小结](#16-小结)
+- [2. 垂直居中](#2-垂直居中)
   - [2.1. line-height](#21-line-height)
   - [2.2. vertical-align](#22-vertical-align)
   - [2.3. table-cell](#23-table-cell)
   - [2.4. positon margin](#24-positon-margin)
   - [2.5. positon transform](#25-positon-transform)
   - [2.6. flex](#26-flex)
-  - [2.7. 小结](#27-%e5%b0%8f%e7%bb%93)
-- [3. 水平垂直居中](#3-%e6%b0%b4%e5%b9%b3%e5%9e%82%e7%9b%b4%e5%b1%85%e4%b8%ad)
+  - [2.7. 小结](#27-小结)
+- [3. 水平垂直居中](#3-水平垂直居中)
   - [3.1. text-algin&line-height](#31-text-alginline-height)
   - [3.2. table-cell](#32-table-cell)
   - [3.3. positon margin](#33-positon-margin)
   - [3.4. positon transform](#34-positon-transform)
   - [3.5. flex](#35-flex)
-  - [3.6. 小结](#36-%e5%b0%8f%e7%bb%93)
+  - [3.6. 小结](#36-小结)
 
 <!-- /TOC -->
+
+**CSS 居中** 总结了网页中常见的水平，垂直和水平垂直的居中方式，每种居中模式都整理的常用的方法和场景。[线上 demo](https://codepen.io/liupeng1991/pen/rNOwjWq)
+
+> 参考文档 [MDN](https://developer.mozilla.org) 参考文档 [兼容性](https://caniuse.com/)
 
 # 1. 水平居中
 

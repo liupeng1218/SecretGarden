@@ -1,34 +1,38 @@
 <!-- TOC -->
 
-- [1. 深浅拷贝](#1-%e6%b7%b1%e6%b5%85%e6%8b%b7%e8%b4%9d)
-  - [1.1. 浅拷贝](#11-%e6%b5%85%e6%8b%b7%e8%b4%9d)
-  - [1.2. 深拷贝](#12-%e6%b7%b1%e6%8b%b7%e8%b4%9d)
-    - [1.2.1. JSON](#121-json)
-    - [1.2.2. 手动实现](#122-%e6%89%8b%e5%8a%a8%e5%ae%9e%e7%8e%b0)
-- [2. JSON 实现](#2-json-%e5%ae%9e%e7%8e%b0)
-  - [2.1. JSON.stringify](#21-jsonstringify)
-  - [2.2. JSON.parse](#22-jsonparse)
-- [3. Premise](#3-premise)
-  - [3.1. 手工打造](#31-%e6%89%8b%e5%b7%a5%e6%89%93%e9%80%a0)
-- [4. async](#4-async)
-- [5. 定时器](#5-%e5%ae%9a%e6%97%b6%e5%99%a8)
-  - [5.1. setTimeout](#51-settimeout)
-  - [5.2. setInterval](#52-setinterval)
-  - [5.3. requestAnimationFrame](#53-requestanimationframe)
-- [6. 浏览器的 Event Loop](#6-%e6%b5%8f%e8%a7%88%e5%99%a8%e7%9a%84-event-loop)
-- [7. 模块化](#7-%e6%a8%a1%e5%9d%97%e5%8c%96)
-  - [7.1. 立即执行函数](#71-%e7%ab%8b%e5%8d%b3%e6%89%a7%e8%a1%8c%e5%87%bd%e6%95%b0)
-  - [7.2. CMD,AMD](#72-cmdamd)
-  - [7.3. COMMONJS](#73-commonjs)
-  - [7.4. ES Module](#74-es-module)
+- [深浅拷贝](#深浅拷贝)
+  - [浅拷贝](#浅拷贝)
+  - [深拷贝](#深拷贝)
+    - [JSON](#json)
+    - [手动实现](#手动实现)
+- [防抖节流](#防抖节流)
+  - [防抖](#防抖)
+    - [场景](#场景)
+  - [节流](#节流)
+- [JSON 实现](#json-实现)
+  - [JSON.stringify](#jsonstringify)
+  - [JSON.parse](#jsonparse)
+- [Premise](#premise)
+  - [手工打造](#手工打造)
+- [async](#async)
+- [定时器](#定时器)
+  - [setTimeout](#settimeout)
+  - [setInterval](#setinterval)
+  - [requestAnimationFrame](#requestanimationframe)
+- [浏览器的 Event Loop](#浏览器的-event-loop)
+- [模块化](#模块化)
+  - [立即执行函数](#立即执行函数)
+  - [CMD,AMD](#cmdamd)
+  - [COMMONJS](#commonjs)
+  - [ES Module](#es-module)
 
 <!-- /TOC -->
 
-# 1. 深浅拷贝
+# 深浅拷贝
 
 当我们在复制引用类型的时候，复制的是其指针地址，修改副本时会同时修改原有内容
 
-## 1.1. 浅拷贝
+## 浅拷贝
 
 浅拷贝可以"真实"复制引用类型的数据，使其互相独立
 
@@ -55,14 +59,13 @@ const shallowClone = (target) => {
 
 ```
 
-**问题**
-当拷贝的数据只有一层属性时，浅拷贝可以解决问题，如果数据有多层引用类型嵌套，浅拷贝又会遇到引用指针的问题
+**问题** 当拷贝的数据只有一层属性时，浅拷贝可以解决问题，如果数据有多层引用类型嵌套，浅拷贝又会遇到引用指针的问题
 
-## 1.2. 深拷贝
+## 深拷贝
 
 深拷贝就是解决浅拷贝不能拷贝引用嵌套数据，实现真正的拷贝
 
-### 1.2.1. JSON
+### JSON
 
 `JSON.parse(JSON.stringify())` 可以解决大部分场景
 
@@ -74,7 +77,7 @@ const shallowClone = (target) => {
 - 无法拷贝一些特殊的对象，诸如 RegExp, Date, Set, Map 等。
 - 不能解决循环引用的对象
 
-### 1.2.2. 手动实现
+### 手动实现
 
 深拷贝是对数据中引用类型数据进行递归浅拷贝，还需要考虑好多种边界情况，比如原型链如何处理、DOM 如何处理，特殊对象如何拷贝等等
 
@@ -224,9 +227,67 @@ const deepClone = (target, map = new WeakMap()) => {
 
 ```
 
-# 2. JSON 实现
+# 防抖节流
 
-## 2.1. JSON.stringify
+## 防抖
+
+防抖是当用户触发事件后，延迟时间后再执行，如果在延迟时间内再次触发则重置延迟时间
+
+```JS
+// func是用户传入需要防抖的函数
+// wait是等待时间
+const debounce = (func, wait = 50) => {
+  // 缓存一个定时器id
+  let timer = 0
+  // 这里返回的函数是每次用户实际调用的防抖函数
+  // 如果已经设定过定时器了就清空上一次的定时器
+  // 开始一个新的定时器，延迟执行用户传入的方法
+  return function(...args) {
+    if (timer) clearTimeout(timer)
+    timer = setTimeout(() => {
+      func.apply(this, args)
+    }, wait)
+  }
+}
+```
+
+### 场景
+
+`resize`事件监控响应
+
+## 节流
+
+节流是指用户不断触发事件，事件总以特定的延迟间隔进行触发
+
+```JS
+// func是用户传入需要防抖的函数
+// wait是等待时间
+const throttle = (func, wait = 50) => {
+  // 上一次执行该函数的时间
+  let lastTime = 0
+  return function(...args) {
+    // 当前时间
+    let now = +new Date()
+    // 将当前时间和上一次执行函数时间对比
+    // 如果差值大于设置的等待时间就执行函数
+    if (now - lastTime > wait) {
+      lastTime = now
+      func.apply(this, args)
+    }
+  }
+}
+
+setInterval(
+  throttle(() => {
+    console.log(1)
+  }, 500),
+  1
+)
+```
+
+# JSON 实现
+
+## JSON.stringify
 
 - Boolean | Number| String 类型会自动转换成对应的原始值。
 - undefined、任意函数以及 symbol，会被忽略（出现在非数组对象的属性值中时），或者被转换成 null（出现在数组中时）。
@@ -263,7 +324,7 @@ jsonStringify({b: undefined}) // "{"b":"undefined"}"
 
 ```
 
-## 2.2. JSON.parse
+## JSON.parse
 
 用来解析 JSON 字符串，构造由字符串描述的 JavaScript 值或对象。提供可选的 reviver 函数用以在返回之前对所得到的对象执行变换(操作)。
 
@@ -279,10 +340,9 @@ jsonParse(jsonStringify({ b: undefined }))
 // Object { b: "undefined"}
 ```
 
-# 3. Premise
+# Premise
 
-`Promise` 是异步编程的一种解决方案，所谓`Promise`，简单说就是一个容器，里面保存着某个未来才会结束的事件（通常是一个异步操作）的结果。
-从语法上说，`Promise` 是一个对象，从它可以获取异步操作的消息。`Promise` 提供统一的 API，各种异步操作都可以用同样的方法进行处理。
+`Promise` 是异步编程的一种解决方案，所谓`Promise`，简单说就是一个容器，里面保存着某个未来才会结束的事件（通常是一个异步操作）的结果。从语法上说，`Promise` 是一个对象，从它可以获取异步操作的消息。`Promise` 提供统一的 API，各种异步操作都可以用同样的方法进行处理。
 
 - 对象的状态不受外界影响。`Promise`对象代表一个异步操作，有三种状态：pending（进行中）、fulfilled（已成功）和 rejected（已失败）。只有异步操作的结果，可以决定当前是哪一种状态，任何其他操作都无法改变这个状态。
 - 一旦状态改变，就不会再变，任何时候都可以得到这个结果。`Pomise`对象的状态改变，只有两种可能：从 pending 变为 fulfilled 和从 pending 变为 rejected。只要这两种情况发生，状态就凝固了，不会再变了，会一直保持这个结果，这时就称为 resolved（已定型）
@@ -311,11 +371,11 @@ console.log('finifsh')
 
 ```js
 Promise.resolve(1)
-  .then((res) => {
+  .then(res => {
     console.log(res) // => 1
     return 2 // 包装成 Promise.resolve(2)
   })
-  .then((res) => {
+  .then(res => {
     console.log(res) // => 2
   })
 ```
@@ -326,7 +386,7 @@ Promise.resolve(1)
 - 如果不设置回调函数，`Promise`内部抛出的错误，不会反应到外部。
 - 当处于 pending 状态时，无法得知目前进展到哪一个阶段（刚刚开始还是即将完成）。
 
-## 3.1. 手工打造
+## 手工打造
 
 简易版本
 
@@ -406,7 +466,7 @@ MyPromise.prototype.then = function(onFulfilled, onRejected) {
 //  接下来就是一系列判断状态的逻辑，当状态不是等待态时，就去执行相对应的函数。如果状态是等待态的话，就往回调函数中 push 函数
 ```
 
-# 4. async
+# async
 
 `async` 函数返回一个 `Promise` 对象，可以使用 `then` 方法添加回调函数。当函数执行的时候，一旦遇到 `await` 就会先返回，等到异步操作完成，再接着执行函数体内后面的语句。
 
@@ -422,23 +482,23 @@ getStockPriceByName('goog').then(function (result) {
 })
 ```
 
-# 5. 定时器
+# 定时器
 
 常见的定时器函数有 `setTimeout` 、 `setInterval` 、 `requestAnimationFrame`
 
-## 5.1. setTimeout
+## setTimeout
 
 很多人认为 `setTimeout` 是延时多久，那就应该是多久后执行。
 
 其实这个观点是错误的，因为 JS 是单线程执行的，如果前面的代码影响了性能，就会导致 `setTimeout` 不会按期执行。当然了，我们可以通过代码去修正 `setTimeout`，从而使定时器相对准确
 
-## 5.2. setInterval
+## setInterval
 
 接下来我们来看 `setInterval`，其实这个函数作用和 `setTimeout` 基本一致，只是该函数是每隔一段时间执行一次回调函数。
 
 通常来说不建议使用 `setInterval`。第一，它和 `setTimeout` 一样，不能保证在预期的时间执行任务。第二，它存在执行累积的问题，请看以下伪代码
 
-## 5.3. requestAnimationFrame
+## requestAnimationFrame
 
 首先 `requestAnimationFrame` 自带函数节流功能，基本可以保证在 16.6 毫秒内只执行一次（不掉帧的情况下），并且该函数的延时效果是精确的，没有其他定时器时间不准的问题，当然你也可以通过该函数来实现 setTimeout。
 
@@ -468,12 +528,11 @@ setInterval(timer => {
 }, 1000)
 ```
 
-# 6. 浏览器的 Event Loop
+# 浏览器的 Event Loop
 
 `javascript` 是一门单线程语言，在最新的 HTML5 中提出了 `Web-Worker`，但 `javascript` 是单线程这一核心仍未改变。所以一切 `javascript` 版的"多线程"都是用单线程模拟出来的，一切 `javascript` 多线程都是纸老 虎！
 
-当我们执行 JS 代码的时候其实就是往执行栈中放入函数，当遇到异步的代码时，会被挂起并在需要执行的时候加入到 `Task`（有多种 Task） 队列中。js 引擎存在 `monitoring process` 进程，会持续不断的检查主线程执行栈是否为空，一旦执行栈为空，`Event Loop` 就会从 `Task` 队列中拿出需要执行的代码并放入执行栈中执行。
-![eventloop](../assets/images/js-eventloop.jpg)
+当我们执行 JS 代码的时候其实就是往执行栈中放入函数，当遇到异步的代码时，会被挂起并在需要执行的时候加入到 `Task`（有多种 Task） 队列中。js 引擎存在 `monitoring process` 进程，会持续不断的检查主线程执行栈是否为空，一旦执行栈为空，`Event Loop` 就会从 `Task` 队列中拿出需要执行的代码并放入执行栈中执行。 ![eventloop](../assets/images/js-eventloop.jpg)
 
 1. 同步和异步任务分别进入不同的执行"场所"，同步的进入主线程，异步的进入 Event Table 并注册函数。
 1. 当指定的事情完成时，Event Table 会将这个函数移入 Event Queue。
@@ -482,9 +541,7 @@ setInterval(timer => {
 
 不同的任务源会被分配到不同的 `Task` 队列中，任务源可以分为 微任务（microtask） 和 宏任务（macrotask）。在 `ES6` 规范中，`microtask` 称为 `jobs`，`macrotask` 称为 `task`。
 
-macro-task(宏任务)：包括整体代码 `script`，`setTimeout`，`setInterval`
-micro-task(微任务)：`Promise`，`process.nextTick`
-![eventloop](../assets/images/js-eventloop-task.jpg)
+macro-task(宏任务)：包括整体代码 `script`，`setTimeout`，`setInterval` micro-task(微任务)：`Promise`，`process.nextTick` ![eventloop](../assets/images/js-eventloop-task.jpg)
 
 1. 首先执行同步代码，这属于宏任务
 2. 当执行完所有同步代码后，执行栈为空，查询是否有异步代码需要执行
@@ -543,13 +600,13 @@ function f() {
 
 ```
 
-# 7. 模块化
+# 模块化
 
 - 解决命名冲突
 - 提高代码复用性
 - 提高代码可维护性
 
-## 7.1. 立即执行函数
+## 立即执行函数
 
 在早期，使用立即执行函数实现模块化是常见的手段，通过函数作用域解决了命名冲突、污染全局作用域的问题
 
@@ -560,7 +617,7 @@ function f() {
 })(globalVariable)
 ```
 
-## 7.2. CMD,AMD
+## CMD,AMD
 
 `CMD`和`AMD`是发展中的过渡方案
 
@@ -580,7 +637,7 @@ define(function(require, exports, module) {
 })
 ```
 
-## 7.3. COMMONJS
+## COMMONJS
 
 CommonJS 最早是 Node 在使用，目前也仍然广泛使用，比如在 Webpack 中你就能见到它，当然目前在 Node 中的模块管理已经和 CommonJS 有一些区别了。
 
@@ -597,7 +654,7 @@ var module = require('./a.js')
 module.a // -> log 1
 ```
 
-## 7.4. ES Module
+## ES Module
 
 ES Module 是原生实现的模块化方案，与 CommonJS 有以下几个区别
 
