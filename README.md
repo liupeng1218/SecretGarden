@@ -76,12 +76,7 @@
 
 ### 性能
 
-1. [性能](./performance/performance.md) :wavy_dash:
-   - 静态文件
-   - 图片
-   - 缓存
-   - CDN
-   - 按需加载/懒加载
+1. [性能](./performance/performance.md) :100:
 
 ### Node
 
