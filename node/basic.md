@@ -148,7 +148,7 @@ fs.writeFile('/Users/joe/test.txt', content, { flag: 'a+' }, err => {})
 
 `os` 模块提供了与操作系统相关的实用方法和属性
 
-1. `os.cpus()` 获取操作系统的 CPU 信息
+1. `os.cpus()` 获取操作系统的 CPU 信息dirname
 2. `os.totalmem()` 获取内存信息
 
 ## url
